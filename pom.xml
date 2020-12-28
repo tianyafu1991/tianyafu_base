@@ -7,12 +7,12 @@
   <groupId>com.tianyafu</groupId>
   <artifactId>tianyafu_base</artifactId>
   <version>1.0</version>
-
+  <modules>
+    <module>tianyafu-hadoop</module>
+  </modules>
   <packaging>pom</packaging>
 
   <name>tianyafu_base</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
 
   <repositories>
     <!-- 阿里云仓库 -->
@@ -31,6 +31,28 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+
+    <junit.version>4.12</junit.version>
+
+
+    <hadoop.version>2.6.0-cdh5.16.2</hadoop.version>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-client</artifactId>
+        <version>${hadoop.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
 </project>
