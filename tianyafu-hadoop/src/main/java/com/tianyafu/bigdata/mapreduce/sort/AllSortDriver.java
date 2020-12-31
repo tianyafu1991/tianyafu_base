@@ -1,11 +1,9 @@
-package com.tianyafu.bigdata.mapreduce.sort.all;
+package com.tianyafu.bigdata.mapreduce.sort;
 
-import com.tianyafu.bigdata.mapreduce.ser.Access;
 import com.tianyafu.utils.FileUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -40,10 +38,10 @@ public class AllSortDriver {
         job.setMapperClass(MyMapper.class);
         job.setReducerClass(MyReducer.class);
 
-        job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(Access.class);
-        job.setOutputKeyClass(NullWritable.class);
-        job.setOutputValueClass(Access.class);
+        job.setMapOutputKeyClass(Traffic.class);
+        job.setMapOutputValueClass(Text.class);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(Traffic.class);
 
         FileInputFormat.addInputPath(job, new Path(input));
         FileOutputFormat.setOutputPath(job, new Path(out));
@@ -54,27 +52,36 @@ public class AllSortDriver {
 
     }
 
-    public static class MyMapper extends Mapper<LongWritable, Text, Text, Access> {
+    public static class MyMapper extends Mapper<LongWritable, Text, Traffic, Text> {
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String[] splits = value.toString().split("\t");
             String phone = splits[1];
             long up = Long.parseLong(splits[splits.length - 3]);
             long down = Long.parseLong(splits[splits.length - 2]);
-            context.write(new Text(phone), new Access(phone, up, down));
+            context.write( new Traffic(up, down),new Text(phone));
         }
     }
 
-    public static class MyReducer extends Reducer<Text, Access, NullWritable, Access> {
-        @Override
-        protected void reduce(Text key, Iterable<Access> values, Context context) throws IOException, InterruptedException {
+    public static class MyReducer extends Reducer<Traffic, Text, Text, Traffic> {
+       /* @Override
+        protected void reduce(Text key, Iterable<Traffic> values, Context context) throws IOException, InterruptedException {
             Long allUp = 0L;
             Long allDown = 0L;
-            for (Access access : values) {
-                allUp += access.getUp();
-                allDown += access.getDown();
+            for (Traffic traffic : values) {
+                allUp += traffic.getUp();
+                allDown += traffic.getDown();
             }
-            context.write(NullWritable.get(), new Access(key.toString(), allUp, allDown));
+            context.write(NullWritable.get(), new Traffic(allUp, allDown));
+        }*/
+
+        @Override
+        protected void reduce(Traffic key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+            /*Long allUp = 0L;
+            Long allDown = 0L;*/
+            for (Text phone : values) {
+                context.write(phone,key);
+            }
         }
     }
 }

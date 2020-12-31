@@ -1,4 +1,4 @@
-package com.tianyafu.bigdata.mapreduce.sort.all;
+package com.tianyafu.bigdata.mapreduce.sort;
 
 import org.apache.hadoop.io.WritableComparable;
 
