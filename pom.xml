@@ -9,6 +9,7 @@
   <version>1.0</version>
   <modules>
     <module>tianyafu-hadoop</module>
+      <module>tianyafu-shell</module>
   </modules>
   <packaging>pom</packaging>
 
