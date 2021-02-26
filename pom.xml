@@ -11,6 +11,8 @@
     <module>tianyafu-hadoop</module>
       <module>tianyafu-shell</module>
     <module>tianyafu-hive</module>
+      <module>tianyafu-scala</module>
+      <module>tianyafu-hadoop-project</module>
   </modules>
   <packaging>pom</packaging>
 
