@@ -13,6 +13,7 @@
     <module>tianyafu-hive</module>
       <module>tianyafu-scala</module>
       <module>tianyafu-hadoop-project</module>
+    <module>tianyafu-spark-core</module>
   </modules>
   <packaging>pom</packaging>
 
@@ -38,11 +39,15 @@
 
     <junit.version>4.12</junit.version>
 
-
     <hadoop.version>2.6.0-cdh5.16.2</hadoop.version>
     <mysql.version>5.1.47</mysql.version>
 
     <hive.version>1.1.0-cdh5.16.2</hive.version>
+
+    <scala.version>2.12.0</scala.version>
+    <scala.tools.version>2.12</scala.tools.version>
+
+    <spark.version>2.4.6</spark.version>
   </properties>
 
   <dependencyManagement>
@@ -70,6 +75,12 @@
         <groupId>org.apache.hive</groupId>
         <artifactId>hive-exec</artifactId>
         <version>${hive.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-core_${scala.tools.version}</artifactId>
+        <version>${spark.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
