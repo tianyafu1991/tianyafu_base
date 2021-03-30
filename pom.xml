@@ -15,6 +15,7 @@
       <module>tianyafu-hadoop-project</module>
     <module>tianyafu-spark-core</module>
     <module>tianyafu-flink-basic</module>
+    <module>tianyafu-flink-datastream</module>
   </modules>
   <packaging>pom</packaging>
 
