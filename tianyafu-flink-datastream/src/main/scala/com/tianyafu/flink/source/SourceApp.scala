@@ -1,5 +1,6 @@
 package com.tianyafu.flink.source
 
+import com.tianyafu.flink.bean.Domain
 import com.tianyafu.flink.bean.Domain.Access
 import com.tianyafu.flink.bykey.SpecifyingTransformationFunctionsApp.TianyafuMap
 import org.apache.flink.api.scala._
@@ -93,13 +94,29 @@ object SourceApp {
     /**
      * 自定义增强的多并行度的source
      */
-    val stream: DataStream[Access] = env.addSource(new AccessSource03).setParallelism(2)
+    /*val stream: DataStream[Access] = env.addSource(new AccessSource03).setParallelism(2)
     println(stream.parallelism)
 
     println(stream.map(x => x).setParallelism(3).parallelism)
 
-    stream.print().setParallelism(2)
+    stream.print().setParallelism(2)*/
 
+    /**
+     * 自定义单并行度的MySQL数据源
+     */
+    /*val stream: DataStream[Domain.Student] = env.addSource(new TianyuafuMySQLSource)
+    println(stream.parallelism)
+    println(stream.map(x => x).parallelism)
+    stream.print()*/
+
+
+    /**
+     * 自定义多并行度的MySQL数据源
+     */
+    /*val stream: DataStream[Domain.Student] = env.addSource(new TianyuafuMySQLSource02).setParallelism(2)
+    println(stream.parallelism)
+    println(stream.map(x => x).parallelism)
+    stream.print()*/
 
     env.execute(getClass.getSimpleName)
   }
