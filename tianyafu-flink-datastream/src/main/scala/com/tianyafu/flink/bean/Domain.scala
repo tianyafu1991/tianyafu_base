@@ -6,4 +6,6 @@ object Domain {
 
   case class Student(id:Int,name:String,age:Int)
 
+  case class SplitAccess(province:String,city:String,traffic:Long)
+
 }
