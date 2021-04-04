@@ -79,6 +79,16 @@
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
             <version>${es.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-kafka_${scala.tools.version}</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-runtime-web_${scala.tools.version}</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
