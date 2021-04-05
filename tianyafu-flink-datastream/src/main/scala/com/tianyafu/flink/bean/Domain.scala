@@ -8,4 +8,6 @@ object Domain {
 
   case class SplitAccess(province:String,city:String,traffic:Long)
 
+  case class Temperature(name:String,time:Long,temperature:Float)
+
 }
