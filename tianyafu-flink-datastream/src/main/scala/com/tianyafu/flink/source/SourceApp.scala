@@ -113,10 +113,10 @@ object SourceApp {
     /**
      * 自定义多并行度的MySQL数据源
      */
-    /*val stream: DataStream[Domain.Student] = env.addSource(new TianyuafuMySQLSource02).setParallelism(2)
+    val stream: DataStream[Domain.Student] = env.addSource(new TianyuafuMySQLSource02).setParallelism(2)
     println(stream.parallelism)
     println(stream.map(x => x).parallelism)
-    stream.print()*/
+    stream.print()
 
     env.execute(getClass.getSimpleName)
   }
