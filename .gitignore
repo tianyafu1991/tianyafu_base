@@ -3,6 +3,8 @@
 
 # Log file
 *.log
+!/data/access.log
+!/data/splits.log
 
 # BlueJ files
 *.ctxt
