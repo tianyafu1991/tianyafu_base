@@ -17,6 +17,7 @@
     <module>tianyafu-flink-basic</module>
     <module>tianyafu-flink-datastream</module>
     <module>tianyafu-flink-sql</module>
+    <module>tianyafu-flink-project</module>
   </modules>
   <packaging>pom</packaging>
 
@@ -183,6 +184,30 @@
         <groupId>org.apache.flink</groupId>
         <artifactId>flink-json</artifactId>
         <version>${flink.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>4.5.6</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>fastjson</artifactId>
+        <version>1.2.51</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpasyncclient</artifactId>
+        <version>4.1.4</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>druid</artifactId>
+        <version>1.1.20</version>
       </dependency>
 
     </dependencies>
