@@ -1,4 +1,4 @@
-package com.tianyafu.spark
+package com.tianyafu.spark.basic
 
 import org.apache.spark.{SparkConf, SparkContext}
 
