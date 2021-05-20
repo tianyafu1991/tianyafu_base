@@ -3,6 +3,7 @@ package com.tianyafu.spark.basic
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
+
 object BasicApp {
 
   def main(args: Array[String]): Unit = {
@@ -52,6 +53,22 @@ object BasicApp {
     val cogroupRDD: RDD[(String, (Iterable[String], Iterable[Int]))] = left.cogroup(right)
 
     cogroupRDD.foreach(println)
+
+    /**
+     * Action
+     */
+
+    sc.makeRDD(List(1,2,3,4,5)).collect()
+    sc.makeRDD(List(1,2,3,4,5)).zipWithIndex().collectAsMap()
+
+    sc.makeRDD(List(1,2,3,4,5)).first()
+    sc.makeRDD(List(1,2,3,4,5)).take(3)
+    sc.makeRDD(List(1,2,3,4,5)).takeOrdered(3)(Ordering.by(x => -x))
+    sc.makeRDD(List(1,2,3,4,5)).top(3)
+    sc.makeRDD(List("aa","bb","cc","dd")).map((_,1)).countByKey()
+    sc.makeRDD(List("aa","bb","cc","dd")).countByValue()
+    sc.makeRDD(List(("a","1"),("b","1"),("a","2"))).lookup("a")
+    sc.makeRDD(1 to 100).fold(0)(_+_)
 
 
 
