@@ -20,7 +20,7 @@
 
 ## yum安装一些必要的工具
 ```
-[root@mdw ~]# yum install -y net-tools.x86_64 vim lrzsz lsof wget screen tree ntpdate 
+[root@mdw ~]# yum install -y net-tools.x86_64 vim lrzsz lsof wget screen tree ntpdate unzip
 ```
 
 ## 固定IP
@@ -34,6 +34,7 @@ GATEWAY=192.168.198.2
 DNS1=114.114.114.114
 
 [root@mdw ~]# systemctl restart network
+有时候会碰到ping网关 能通  ping DNS不通  这个是缺少指向网关的路由 参考https://blog.csdn.net/qq_40572277/article/details/106517502
 ```
 
 ## 开机自启服务优化
@@ -48,6 +49,12 @@ DNS1=114.114.114.114
 [root@base ~]# /usr/bin/tail -1 /etc/security/limits.conf
 [root@base ~]# ulimit -n 65535
 ```
+
+## 添加hosts文件
+```
+[root@tianyafu ~]# echo "192.168.198.200 tianyafu" >> /etc/hosts
+```
+
 
 ## 清除系统敏感信息
 ```
@@ -82,6 +89,18 @@ uid=1000(admin) gid=1000(admin) 组=1000(admin)
 [root@mdw ~]# echo "admin   ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
 [root@mdw ~]# passwd admin
 admin
+
+[root@tianyafu ~]# useradd hadoop
+[root@tianyafu ~]# passwd hadoop
+密码设置为hadoop即可
+[root@tianyafu ~]# echo "hadoop   ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
+```
+
+
+# 切换到admin后 创建相应的目录
+```
+[root@base ~]# su - admin
+[admin@base ~]$ mkdir tmp sourcecode software shell log lib  data app dw 
 ```
 
 ## 安装JDK
@@ -121,3 +140,219 @@ admin
 trusted-host =  pypi.douban.com
 index-url = http://pypi.douban.com/simple
 ```
+
+
+
+
+## 部署MySQL
+```
+
+```
+
+## 部署Hadoop
+```
+[root@tianyafu ~]# su - admin
+[admin@tianyafu ~]$ tar -zxvf ~/software/hadoop-2.6.0-cdh5.16.2.tar.gz -C ~/app/
+# 设置软连接
+[admin@tianyafu ~]$ cd ~/app/
+[admin@tianyafu app]$ ln -s hadoop-2.6.0-cdh5.16.2 hadoop
+# 配置信任关系
+[admin@tianyafu ~]$ cd
+[admin@tianyafu ~]$ rm -rf ~/.ssh
+[admin@tianyafu ~]$ ssh-keygen
+[admin@tianyafu ~]$ cd ~/.ssh/
+[admin@tianyafu .ssh]$ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+[admin@tianyafu .ssh]$ chmod 0600 ~/.ssh/authorized_keys
+[admin@tianyafu .ssh]$ ssh tianyafu date
+The authenticity of host 'tianyafu (192.168.198.200)' can't be established.
+ECDSA key fingerprint is 1e:e2:6d:86:80:f4:dc:ca:69:0e:68:7d:96:20:2d:2e.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'tianyafu,192.168.198.200' (ECDSA) to the list of known hosts.
+2021年 10月 22日 星期五 12:31:34 CST
+
+# 修改配置文件
+[admin@tianyafu .ssh]$ cd ~/app/hadoop/etc/hadoop
+# hadoop-env.sh 显式指定JAVA_HOME
+[admin@tianyafu hadoop]$ vim hadoop-env.sh
+export JAVA_HOME=/usr/java/jdk1.8.0_181
+# core-site.xml
+[admin@tianyafu hadoop]$ vim core-site.xml
+<configuration>
+<property>
+<name>fs.defaultFS</name>
+<value>hdfs://tianyafu:9000</value>
+</property>
+<property>
+<name>hadoop.tmp.dir</name>
+<value>/home/admin/tmp/</value>
+</property>
+</configuration>
+
+# hdfs-site.xml
+[admin@tianyafu hadoop]$ vim hdfs-site.xml
+<configuration>
+<property>
+<name>dfs.replication</name>
+<value>1</value>
+</property>
+<property>
+<name>dfs.namenode.secondary.http-address</name>
+<value>tianyafu:9868</value>
+</property>
+<property>
+<name>dfs.namenode.secondary.https-address</name>
+<value>tianyafu:9869</value>
+</property>
+</configuration>
+
+# slaves文件
+[admin@tianyafu hadoop]$ vim slaves
+tianyafu
+
+# 格式化Namenode
+[admin@tianyafu hadoop]$ cd ~/app/hadoop/
+[admin@tianyafu hadoop]$ bin/hdfs namenode -format
+# 启动HDFS
+[admin@tianyafu hadoop]$ sbin/start-dfs.sh
+
+# 部署yarn
+[admin@tianyafu hadoop]$ cd ~/app/hadoop/etc/hadoop
+[admin@tianyafu hadoop]$ cp mapred-site.xml.template mapred-site.xml
+[admin@tianyafu hadoop]$ vim mapred-site.xml
+<configuration>
+<property>
+<name>mapreduce.framework.name</name>
+<value>yarn</value>
+</property>
+</configuration>
+
+# yarn-site.xml 注意：要修改yarn的web页面的默认端口，默认为8088；防止被挖矿
+[admin@tianyafu hadoop]$ vim yarn-site.xml
+<configuration>
+<property>
+<name>yarn.nodemanager.aux-services</name>
+<value>mapreduce_shuffle</value>
+</property>
+<property>
+<name>yarn.resourcemanager.webapp.address</name>
+<value>tianyafu:18088</value>
+</property>
+</configuration>
+
+# 启动
+[admin@tianyafu hadoop]$ cd ~/app/hadoop
+[admin@tianyafu hadoop]$ sbin/start-yarn.sh
+
+# 配置环境变量
+[admin@tianyafu hadoop]$ cd
+[admin@tianyafu ~]$ echo -e '# HADOOP_HOME\nexport HADOOP_HOME=/home/admin/app/hadoop\nexport PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH' >>~/.bashrc
+[admin@tianyafu ~]$ source ~/.bashrc
+# 验证
+[admin@tianyafu ~]$ which hdfs
+~/app/hadoop/bin/hdfs
+```
+
+## 部署Hive
+```
+[admin@tianyafu ~]$ tar -xvf ~/software/hive-1.1.0-cdh5.16.2.tar.gz -C ~/app/
+[admin@tianyafu ~]$ ln -s ~/app/hive-1.1.0-cdh5.16.2/ ~/app/hive
+# 参数配置参考：https://cwiki.apache.org/confluence/display/Hive/Configuration+Properties
+[admin@tianyafu ~]$ cd ~/app/hive/conf
+# 修改hive-env.sh
+[admin@tianyafu conf]$ cp hive-env.sh.template hive-env.sh
+# 显式配置hadoop的home
+[admin@tianyafu conf]$ vim hive-env.sh
+HADOOP_HOME=$HADOOP_HOME
+export HADOOP_HEAPSIZE=1024 # 生产上面这个参数是要调大的，1个G是不够的
+# 编辑hive-site.xml，这个配置文件默认是没有提供模板的，所以要自己创建
+[admin@tianyafu conf]$ vim hive-site.xml
+<?xml version="1.0"?>
+
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+<property>
+<name>javax.jdo.option.ConnectionURL</name>
+<value>jdbc:mysql://localhost:3306/hive?createDatabaseIfNotExist=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=utf8</value>
+</property>
+<property>
+<name>javax.jdo.option.ConnectionDriverName</name>
+<value>com.mysql.jdbc.Driver</value>
+</property>
+<property>
+<name>javax.jdo.option.ConnectionUserName</name>
+<value>root</value>
+</property>
+<property>
+<name>javax.jdo.option.ConnectionPassword</name>
+<value>root</value>
+</property>
+<property>
+<name>hive.cli.print.current.db</name>
+<value>true</value>
+<description>打印当前hive库名</description>
+</property>
+<property>
+<name>hive.cli.print.header</name>
+<value>true</value>
+<description>打印当前hive表字段名</description>
+</property>
+<property>
+<name>hive.server2.webui.host</name>
+<value>tianyafu</value>
+<description>hiveserver2的web ui</description>
+</property>
+<property>
+<name>hive.server2.webui.port</name>
+<value>19990</value>
+<description>hiveserver2的web ui 的 port</description>
+</property>
+<property>
+<name>hive.metastore.uris</name>
+<value>thrift://tianyafu:9083</value>
+</property>
+</configuration>
+
+# 配置环境变量
+[admin@tianyafu conf]$ echo -e '# HIVE ENV\nexport HIVE_HOME=/home/admin/app/hive\nexport HIVE_CONF_DIR=$HIVE_HOME/conf\nexport PATH=$HIVE_HOME/bin:$PATH' >> ~/.bashrc
+[admin@tianyafu conf]$ source ~/.bashrc
+# 验证
+[admin@tianyafu conf]$ which hive
+~/app/hive/bin/hive
+
+# 上传MySQL驱动包
+# 将mysql-connector-java-5.1.47.jar包上传到/home/hadoop/lib/目录下
+[admin@tianyafu conf]$ cp ~/lib/mysql-connector-java-5.1.47.jar ~/app/hive/lib/
+
+# 启动MySQL
+[admin@tianyafu ~]$ sudo su -
+[root@tianyafu ~]# su - mysqladmin
+tianyafu:mysqladmin:/usr/local/mysql:>service mysql start
+
+# MySQL中新建hive库 设置库的编码为utf8mb4
+create database IF NOT EXISTS hive default charset utf8mb4 COLLATE utf8mb4_general_ci;
+
+# 通过schematool创建元数据表
+[admin@tianyafu hive]$ schematool -dbType mysql -initSchema
+
+#修改hive元数据库部分表的编码
+避免表字段注释及表注释乱码
+
+修改表的字符集
+-- 修改表的字符集
+alter table columns_v2 default character set utf8 COLLATE utf8_general_ci; -- 表字段信息相关表
+alter table table_params default character set utf8 COLLATE utf8_general_ci; -- 表属性相关表
+alter table partition_keys default character set utf8 COLLATE utf8_general_ci; -- 分区key相关表
+
+-- 修改表字段的字符集
+alter table columns_v2 modify `COMMENT` varchar(256) character set utf8 COLLATE utf8_general_ci; -- 修复表字段注释中文乱码问题
+alter table table_params modify `PARAM_VALUE` varchar(4000) character set utf8 COLLATE utf8_general_ci; -- 修复表注释中文乱码问题
+alter table partition_keys modify `PKEY_COMMENT` varchar(4000) character set utf8 COLLATE utf8_general_ci; -- 修复分区字段注释中文乱码问题
+
+
+# 启动hive
+[admin@tianyafu hive]$ nohup ~/app/hive/bin/hive --service metastore &
+[admin@tianyafu ~]$ hive
+```
+
+
