@@ -71,6 +71,7 @@ export MAVEN_OPTS="${MAVEN_OPTS:--Xmx4g -XX:ReservedCodeCacheSize=2g}"
 https://downloads.lightbend.com/zinc/0.3.15/zinc-0.3.15.tgz
 https://downloads.lightbend.com/scala/2.11.12/scala-2.11.12.tgz
 有时候下载比较慢，提前下载好之后放在$SPARK_HOME/build下面就行
+这里为什么会去找scala2.11.12版本  因为$SPARK_HOME/build/mvn脚本中的scala_version变量是取的项目主pom中的scala.version的值 所以最好是修改主pom中的该值，否则编译出来安装在本地仓库的spark-core等jar包都是2.11.12的版本scala
 
 5.注意：如果我们需要用编译好的spark包拿去部署，则这一步不建议在这里做，毕竟依赖一个hive-site.xml进去不好。
 用IDEA导入源码，找到$SPARK_HOME/sql/hive-thriftserver这个Module，在里面新建一个resources目录，并右键标记位resources，将$Hive_HOME/conf下面的hive-site.xml拷贝到resources

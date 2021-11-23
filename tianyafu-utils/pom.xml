@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>tianyafu-spark-core</artifactId>
+    <artifactId>tianyafu-utils</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,13 +29,23 @@
         <spark.version>2.4.6</spark.version>
     </properties>
 
-
     <dependencies>
         <dependency>
-            <artifactId>tianyafu-utils</artifactId>
-            <groupId>com.tianyafu</groupId>
-            <version>1.0</version>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.tools.version}</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
         </dependency>
     </dependencies>
+
+
 
 </project>
