@@ -1,0 +1,54 @@
+package com.tianyafu.spark.topn
+
+import com.tianyafu.implicitPackage.ImplicitAspect.rdd2RichRDD
+import com.tianyafu.utils.ContextUtils
+import org.apache.spark.{Partitioner, SparkContext}
+import org.apache.spark.rdd.RDD
+
+
+object TopNApp03 {
+
+  def main(args: Array[String]): Unit = {
+    val sc: SparkContext = ContextUtils.getSparkContext(this.getClass.getSimpleName)
+
+    val path = "data/site.log"
+    val lines: RDD[String] = sc.textFile(path)
+    val process: RDD[((String, String), Int)] = lines.map(x => {
+      val splits: Array[String] = x.split(",")
+      val site = splits(0)
+      val url = splits(1)
+      ((site, url), 1)
+    })
+
+    val sites: Array[String] = process.map(_._1._1).distinct().collect()
+
+    // 通过自定义分区器实现相同site的数据分到同一个分区中
+    val sitePartitioner = new SitePartitioner(sites)
+    // TODO 这个里面的sortBy之前 已经转成scala中的List 所以这里是没有产生job的
+    process.reduceByKey(sitePartitioner,_+_).mapPartitions(partition => {
+      partition.toList.sortBy(-_._2).take(2).iterator
+    }).printInfo()
+
+    Thread.sleep(Int.MaxValue)
+
+    sc.stop()
+  }
+
+}
+
+
+/**
+ * 自定义site的分区器
+ * @param sites
+ */
+class SitePartitioner(sites:Array[String]) extends Partitioner{
+
+  val siteMap = sites.zipWithIndex.toMap
+
+  override def numPartitions: Int = sites.length
+
+  override def getPartition(key: Any): Int = {
+    val site: String = key.asInstanceOf[(String, String)]._1
+    siteMap(site)
+  }
+}
