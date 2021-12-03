@@ -70,3 +70,8 @@ spark-sql \
 --conf "spark.shuffle.service.enabled=true"
 ```
 
+
+## CDS2
+```shell
+如果是CDH上部署了spark2 参考:https://docs.cloudera.com/documentation/enterprise/5-16-x/topics/cdh_ig_running_spark_on_yarn.html
+```
