@@ -17,8 +17,8 @@ CDH官方是对JDK的版本有推荐  推荐版本是CDH经过测试的 最佳�
 
 ## 创建对应的目录 并上传安装包
 ```
-[root@hadoop001 ~]# mkdir cdh5.16.1
-[root@hadoop001 ~]# cd cdh5.16.1/
+[root@hadoop001 ~]# mkdir ~/cdh5.16.1
+[root@hadoop001 ~]# cd ~/cdh5.16.1/
 # 将所需要的安装包上传到该目录下
 
 ```
@@ -425,4 +425,33 @@ drwxr-xr-x 2 cloudera-scm cloudera-scm 4096 Dec  3 06:37 parcel-repo
 [root@hadoop001 cloudera]# mkdir -p /opt/cloudera/parcels
 [root@hadoop001 cloudera]# chown -R cloudera-scm:cloudera-scm /opt/cloudera
 
+# 启动 cm server
+[root@hadoop001 ~]# /opt/cloudera-manager/cm-5.16.1/etc/init.d/cloudera-scm-server start
+# 查看日志
+[root@hadoop001 ~]# tail -200f /opt/cloudera-manager/cm-5.16.1/log/cloudera-scm-server/cloudera-scm-server.log
+
+
+# 各个节点启动agent
+[root@hadoop001 ~]# /opt/cloudera-manager/cm-5.16.1/etc/init.d/cloudera-scm-agent start
+[root@hadoop001 ~]# /opt/cloudera-manager/cm-5.16.1/etc/init.d/cloudera-scm-agent status
+cloudera-scm-agent (pid  4288) is running...
+[root@hadoop001 ~]# tail -200f /opt/cloudera-manager/cm-5.16.1/log/cloudera-scm-agent/cloudera-scm-agent.log
+
+
+```
+
+## 按页面提示关闭大页面
+```shell
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+```
+
+## 关闭集群
+```shell
+# 各个节点关闭agent
+[root@hadoop001 ~]# /opt/cloudera-manager/cm-5.16.1/etc/init.d/cloudera-scm-agent stop
+
+[root@hadoop001 ~]# /opt/cloudera-manager/cm-5.16.1/etc/init.d/cloudera-scm-server stop
+[root@hadoop001 ~]# su - mysqladmin
+hadoop001:mysqladmin:/usr/local/mysql:>service mysql stop
 ```
