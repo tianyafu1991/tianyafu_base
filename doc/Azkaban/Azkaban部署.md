@@ -119,7 +119,6 @@ mysql.database=azkaban
 mysql.user=root
 mysql.password=root
 executor.port=12321
-azkaban.use.multiple.executors=true
 
 [admin@sdw2 azkaban-exec-server]$ vim plugins/jobtypes/commonprivate.properties
 # add by tianyafu
