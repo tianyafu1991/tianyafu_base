@@ -49,3 +49,14 @@ hive.aux.jar.path=${hive.home}/auxlib
 jobtype.classpath=${hadoop.home}/etc/hadoop,${hadoop.home}/share/hadoop/common/*,${hadoop.home}/share/hadoop/common/lib/*,${hadoop.home}/share/hadoop/hdfs/*,${hadoop.home}/share/hadoop/hdfs/lib/*,${hadoop.home}/share/hadoop/yarn/*,${hadoop.home}/share/hadoop/yarn/lib/*,${hadoop.home}/share/hadoop/mapreduce/*,${hadoop.home}/share/hadoop/mapreduce/lib/*,${hive.home}/lib/*,${hive.home}/conf,${hive.aux.jar.path}/*
 
 ```
+
+## 插件分发到其它2个节点上
+```
+# 先删除掉其它2个节点上的
+[admin@mdw jobtypes]$ rm ~/app/azkaban-exec-server/plugins/jobtypes/commonprivate.properties 
+[admin@sdw1 jobtypes]$ rm ~/app/azkaban-exec-server/plugins/jobtypes/commonprivate.properties 
+# 分发
+[admin@mdw ~]$ scp -r ~/app/azkaban-exec-server/plugins/jobtypes/* mdw:~/app/azkaban-exec-server/plugins/jobtypes/
+[admin@sdw1 ~]$ scp -r ~/app/azkaban-exec-server/plugins/jobtypes/* sdw1:~/app/azkaban-exec-server/plugins/jobtypes/
+
+```

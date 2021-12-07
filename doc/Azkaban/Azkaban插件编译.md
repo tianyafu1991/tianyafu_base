@@ -11,7 +11,7 @@
 ## 部署nodejs
 ```shell
 下载node-v16.13.1-linux-x64.tar.xz包 上传到~/software目录下
-[admin@sdw2 ~]$ tar -xvf ~/software/node-v12.16.3-linux-x64.tar.xz -C ../app/
+[admin@sdw2 ~]$ tar -xvf ~/software/node-v12.16.3-linux-x64.tar.xz -C ~/app/
 [admin@sdw2 ~]$ ln -s ~/app/node-v12.16.3-linux-x64 ~/app/node
 # 配置环境变量
 [admin@sdw2 ~]$ echo -e '# NODEJS ENV\nexport NODE_HOME=/home/admin/app/node\nexport PATH=$NODE_HOME/bin:$PATH' >> ~/.bashrc
@@ -29,25 +29,7 @@
 [admin@sdw2 node]$ npm install -g less dustjs-linkedin
 ```
 
-## 部署git 这一步可以不做 用系统自带的git就行
-```shell
-[admin@sdw2 ~]$ cd ~/sourcecode/
-[admin@sdw2 sourcecode]$ tar -zxvf git-2.34.1.tar.gz
-[admin@sdw2 sourcecode]$ sudo su -
-[root@sdw2 ~]# yum -y install zlib-devel openssl-devel cpio expat-devel gettext-devel curl-devel perl-ExtUtils-CBuilder perl-ExtUtils-MakeMaker
-[root@sdw2 ~]# yum remove -y git
-[root@sdw2 ~]# exit
-[admin@sdw2 sourcecode]$ cd ~/sourcecode/git-2.34.1
-[admin@sdw2 git-2.34.1]$ make prefix=/usr/local/git all
-[admin@sdw2 git-2.34.1]$ sudo make prefix=/usr/local/git install
-[admin@sdw2 git-2.34.1]$ sudo vim /etc/profile
-# GIT ENV
-export GIT_HOME=/usr/local/git
-export PATH=${GIT_HOME}/bin
-[admin@sdw2 git-2.34.1]$ source /etc/profile
-[admin@sdw2 git-2.34.1]$ git --version
 
-```
 
 
 ## 安装ant和ant-junit

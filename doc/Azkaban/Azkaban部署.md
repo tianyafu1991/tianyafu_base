@@ -20,7 +20,7 @@
 [admin@sdw2 app]$ ln -s azkaban-exec-server-0.1.0-SNAPSHOT azkaban-exec-server
 [admin@sdw2 app]$ ln -s azkaban-web-server-0.1.0-SNAPSHOT azkaban-web-server
 [admin@sdw2 app]$ ln -s azkaban-solo-server-0.1.0-SNAPSHOT azkaban-solo-server
-[admin@sdw2 app]$ ln -s azkaban-db-0.1.0-SNAPSHOT azkaban-db  
+[admin@sdw2 app]$ ln -s azkaban-db-0.1.0-SNAPSHOT azkaban-db
 
 ```
 
@@ -195,4 +195,20 @@ curl -G "sdw2:12321/executor?action=activate" && echo
 ```shell
 [admin@sdw2 azkaban-exec-server]$ cd $AZKABAN_WEB_HOME
 [admin@sdw2 azkaban-web-server]$ ./bin/start-web.sh
+```
+
+## 关闭Azkaban集群
+```shell
+[admin@hadoop001 ~]$ cd $AZKABAN_WEB_HOME
+[admin@hadoop001 azkaban-web-server]$ ./bin/shutdown-web.sh
+[admin@hadoop001 azkaban-web-server]$ cd $AZKABAN_EXECUTOR_HOME
+[admin@hadoop001 azkaban-exec-server]$ ./bin/shutdown-exec.sh 
+
+```
+
+## 踩坑
+```shell
+# 参考:https://www.jianshu.com/p/f539585a4612
+https://github.com/azkaban/azkaban/issues/2124
+
 ```

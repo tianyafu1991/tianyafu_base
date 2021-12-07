@@ -8,6 +8,27 @@
 -rw-r--r--  1 admin admin  19271556 Dec  6 13:35 azkaban-3.81.0.tar.gz
 [admin@sdw2 sourcecode]$ tar -zxvf azkaban-3.81.0.tar.gz 
 ```
+
+## 部署git 编译需要有git环境 如系统有 用系统自带的git就行
+```shell
+[admin@sdw2 ~]$ cd ~/sourcecode/
+[admin@sdw2 sourcecode]$ tar -zxvf git-2.34.1.tar.gz
+[admin@sdw2 sourcecode]$ sudo su -
+[root@sdw2 ~]# yum -y install zlib-devel openssl-devel cpio expat-devel gettext-devel curl-devel perl-ExtUtils-CBuilder perl-ExtUtils-MakeMaker
+[root@sdw2 ~]# yum remove -y git
+[root@sdw2 ~]# exit
+[admin@sdw2 sourcecode]$ cd ~/sourcecode/git-2.34.1
+[admin@sdw2 git-2.34.1]$ sudo make prefix=/usr/local/git all
+[admin@sdw2 git-2.34.1]$ sudo make prefix=/usr/local/git install
+[admin@sdw2 git-2.34.1]$ sudo vim /etc/profile
+# GIT ENV
+export GIT_HOME=/usr/local/git
+export PATH=${GIT_HOME}/bin:${PATH}
+[admin@sdw2 git-2.34.1]$ source /etc/profile
+[admin@sdw2 git-2.34.1]$ git --version
+
+```
+
 ## 修改build.gradle中的仓库地址 改为阿里云的
 ```shell
 [admin@sdw2 sourcecode]$ cd ~/sourcecode/azkaban-3.81.0

@@ -1,0 +1,1 @@
+select site,count(1) cnt from dw.ods_site_url_log_dd_i group by site order by cnt;

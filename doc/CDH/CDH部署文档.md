@@ -455,3 +455,30 @@ echo never > /sys/kernel/mm/transparent_hugepage/enabled
 [root@hadoop001 ~]# su - mysqladmin
 hadoop001:mysqladmin:/usr/local/mysql:>service mysql stop
 ```
+
+## 增加Hive Service
+```shell
+# 1. 页面部署
+# 2. Hive元数据库表的字符集修改
+-- 修改表的字符集
+alter table columns_v2 default character set utf8 COLLATE utf8_general_ci; -- 表字段信息相关表
+alter table table_params default character set utf8 COLLATE utf8_general_ci; -- 表属性相关表
+alter table partition_keys default character set utf8 COLLATE utf8_general_ci; -- 分区key相关表
+
+
+
+-- 修改表字段的字符集
+alter table columns_v2 modify `COMMENT` varchar(256) character set utf8 COLLATE utf8_general_ci; -- 修复表字段注释中文乱码问题
+alter table table_params modify `PARAM_VALUE` varchar(4000) character set utf8 COLLATE utf8_general_ci; -- 修复表注释中文乱码问题
+alter table partition_keys modify `PKEY_COMMENT` varchar(4000) character set utf8 COLLATE utf8_general_ci; -- 修复分区字段注释中文乱码问题
+# 3. 参数优化
+3.1 metastore 和 hiveServer2的java heap默认只有50M  改为为1G
+3.2 hive.fetch.task.conversion参数设置为more
+3.3 hive-site.xml的高级代码段 Hive Client Advanced Configuration Snippet (Safety Valve) for hive-site.xml中
+hive.cli.print.current.db
+true
+
+hive.cli.print.header
+true
+
+```
