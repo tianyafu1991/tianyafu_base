@@ -2,8 +2,7 @@
 
 ## 文档
 ```
-部署时2.0.0版本刚发布 集群部署文档不完善 所以参考1.3.9版本的文档
-参考:https://dolphinscheduler.apache.org/zh-cn/docs/1.3.9/user_doc/cluster-deployment.html
+参考:https://dolphinscheduler.apache.org/zh-cn/docs/1.3.2/user_doc/cluster-deployment.html
 ```
 
 ## 环境准备
@@ -17,12 +16,12 @@
 
 ## 下载并解压
 ```shell
+[admin@sdw2 ~]$ sudo yum install –y psmisc
 [admin@sdw2 ~]$ mkdir app bin data dw lib log script shell software sourcecode tmp
 [admin@sdw2 ~]$ cd software/
-[admin@sdw2 software]$ wget https://downloads.apache.org/dolphinscheduler/2.0.0/apache-dolphinscheduler-2.0.0-bin.tar.gz
-[admin@sdw2 software]$ tar -zxvf apache-dolphinscheduler-2.0.0-bin.tar.gz
-[admin@sdw2 software]$ scp -r apache-dolphinscheduler-2.0.0-bin mdw:/home/admin/software/
-[admin@sdw2 software]$ ln -s apache-dolphinscheduler-2.0.0-bin dolphinscheduler-bin
+[admin@sdw2 software]$ wget https://archive.apache.org/dist/incubator/dolphinscheduler/1.3.2/apache-dolphinscheduler-incubating-1.3.2-dolphinscheduler-bin.tar.gz
+[admin@sdw2 software]$ tar -zxvf apache-dolphinscheduler-incubating-1.3.2-dolphinscheduler-bin.tar.gz
+[admin@sdw2 software]$ ln -s apache-dolphinscheduler-incubating-1.3.2-dolphinscheduler-bin dolphinscheduler-bin
 ```
 
 ## 创建部署用户和hosts映射
@@ -34,7 +33,7 @@
 # echo "dolphinscheduler123" | passwd --stdin dolphinscheduler
 
 # 配置 sudo 免密    本次部署在/etc/sudoers中并没有Defaults    requiretty 这一行  官网中requirett少了个y
-echo 'dolphinscheduler  ALL=(ALL)  NOPASSWD: NOPASSWD: ALL' >> /etc/sudoers
+echo 'admin  ALL=(ALL)  NOPASSWD: NOPASSWD: ALL' >> /etc/sudoers
 sed -i 's/Defaults    requiretty/#Defaults    requiretty/g' /etc/sudoers
 ```
 
@@ -46,8 +45,8 @@ sed -i 's/Defaults    requiretty/#Defaults    requiretty/g' /etc/sudoers
 
 ## 数据库初始化
 ```shell
-上传jar包并重命名
-[admin@sdw2 lib]$ mv mysql-connector-java-5.1.47.jar mysql-connector-java.jar
+上传jar包并重命名 这里直接拷贝CDH集群所需的驱动包即可  CDH 要求驱动包放在/usr/share/java/目录下
+[admin@sdw2 ~]$ cp /usr/share/java/mysql-connector-java.jar ~/software/dolphinscheduler-bin/lib/
 
 CREATE DATABASE dolphinscheduler DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 CREATE USER 'admin'@'%' IDENTIFIED BY 'dd@2016';
@@ -56,5 +55,12 @@ GRANT ALL PRIVILEGES ON dolphinscheduler.* TO 'admin'@'localhost' IDENTIFIED BY 
 flush privileges;
 
 [admin@sdw2 lib]$ cd 
-[admin@sdw2 ~]$ vim ~/software/dolphinscheduler-bin/conf/datasource.properties  
+[admin@sdw2 ~]$ vim ~/software/dolphinscheduler-bin/conf/datasource.properties
+[admin@sdw2 ~]$ cd ~/software/dolphinscheduler-bin/
+[admin@sdw2 dolphinscheduler-bin]$ sh script/create-dolphinscheduler.sh
+[admin@sdw2 dolphinscheduler-bin]$ vim ~/software/dolphinscheduler-bin/conf/env/dolphinscheduler_env.sh 
+# 将jdk软链到/usr/bin/java下 每个节点都要执行
+[admin@sdw2 dolphinscheduler-bin]$ sudo ln -s /usr/java/jdk1.8.0_181/bin/java /usr/bin/java
+[admin@sdw2 dolphinscheduler-bin]$ vim ~/software/dolphinscheduler-bin/conf/config/install_config.conf
+[admin@sdw2 dolphinscheduler-bin]$ sh install.sh
 ```
