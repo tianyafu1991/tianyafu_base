@@ -2,7 +2,7 @@
 
 ## 文档
 ```
-参考:https://dolphinscheduler.apache.org/zh-cn/docs/1.3.2/user_doc/cluster-deployment.html
+参考:https://dolphinscheduler.apache.org/zh-cn/docs/1.3.9/user_doc/cluster-deployment.html
 ```
 
 ## 环境准备
@@ -18,10 +18,10 @@
 ```shell
 [admin@sdw2 ~]$ sudo yum install –y psmisc
 [admin@sdw2 ~]$ mkdir app bin data dw lib log script shell software sourcecode tmp
-[admin@sdw2 ~]$ cd software/
-[admin@sdw2 software]$ wget https://archive.apache.org/dist/incubator/dolphinscheduler/1.3.2/apache-dolphinscheduler-incubating-1.3.2-dolphinscheduler-bin.tar.gz
-[admin@sdw2 software]$ tar -zxvf apache-dolphinscheduler-incubating-1.3.2-dolphinscheduler-bin.tar.gz
-[admin@sdw2 software]$ ln -s apache-dolphinscheduler-incubating-1.3.2-dolphinscheduler-bin dolphinscheduler-bin
+[admin@sdw2 ~]$ cd ~/software/
+[admin@sdw2 software]$ wget https://dlcdn.apache.org/dolphinscheduler/1.3.9/apache-dolphinscheduler-1.3.9-bin.tar.gz
+[admin@sdw2 software]$ tar -zxvf apache-dolphinscheduler-1.3.9-bin.tar.gz
+[admin@sdw2 software]$ ln -s apache-dolphinscheduler-1.3.9-bin dolphinscheduler-bin
 ```
 
 ## 创建部署用户和hosts映射
@@ -56,9 +56,21 @@ flush privileges;
 
 [admin@sdw2 lib]$ cd 
 [admin@sdw2 ~]$ vim ~/software/dolphinscheduler-bin/conf/datasource.properties
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.datasource.url=jdbc:mysql://sdw2:3306/dolphinscheduler?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+spring.datasource.username=admin
+spring.datasource.password=dd@2016
 [admin@sdw2 ~]$ cd ~/software/dolphinscheduler-bin/
 [admin@sdw2 dolphinscheduler-bin]$ sh script/create-dolphinscheduler.sh
-[admin@sdw2 dolphinscheduler-bin]$ vim ~/software/dolphinscheduler-bin/conf/env/dolphinscheduler_env.sh 
+[admin@sdw2 dolphinscheduler-bin]$ vim ~/software/dolphinscheduler-bin/conf/env/dolphinscheduler_env.sh
+export HADOOP_HOME=/opt/cloudera/parcels/CDH/lib/hadoop
+export HADOOP_CONF_DIR=/etc/hadoop/conf
+export SPARK_HOME2=/application/spark
+export JAVA_HOME=/usr/java/jdk1.8.0_181/
+export HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
+#export FLINK_HOME=/opt/soft/flink
+export DATAX_HOME=/application/data-center/datax/bin/datax.py
+export PATH=$HADOOP_HOME/bin:$SPARK_HOME2/bin:$JAVA_HOME/bin:$HIVE_HOME/bin:$DATAX_HOME:$PATH
 # 将jdk软链到/usr/bin/java下 每个节点都要执行
 [admin@sdw2 dolphinscheduler-bin]$ sudo ln -s /usr/java/jdk1.8.0_181/bin/java /usr/bin/java
 [admin@sdw2 dolphinscheduler-bin]$ vim ~/software/dolphinscheduler-bin/conf/config/install_config.conf

@@ -482,3 +482,21 @@ hive.cli.print.header
 true
 
 ```
+
+## linux用户与HDFS用户打通
+```shell
+# admin用户在hdfs上创建目录或者上传文件是没有权限的，
+# 在HDFS上，hdfs是最大权限用户，supergroup是最大权限用户组。HDFS的权限是共用了Linux系统的权限。
+#所以在Linux上创建supergroup 组，将admin用户添加superadmin附属组，并同步HDFS的权限即可
+
+
+
+# 增加supergroup用户组
+groupadd supergroup
+# 将admin添加supergroup附属组
+usermod -a -g admin -G supergroup admin
+# 同步系统的信息到HDFS
+su - hdfs -s /bin/bash -c "hdfs dfsadmin -refreshUserToGroupsMappings"
+# admin用户增加sudo权限 需要root用户添加
+echo 'admin  ALL=(ALL)  NOPASSWD: NOPASSWD: ALL' >> /etc/sudoers
+```

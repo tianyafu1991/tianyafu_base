@@ -25,3 +25,4 @@ hs_err_pid*
 /tianyafu_base.iml
 /tianyafu-flink-sql.iml
 /tianyafu-flink-project.iml
+/target

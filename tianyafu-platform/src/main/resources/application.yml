@@ -1,0 +1,31 @@
+server:
+  port: 9527
+  servlet:
+    context-path: /platform
+
+
+
+spring:
+  datasource:
+    username: dev
+    password: x1skrFBxdtFl3p4G
+    url: jdbc:mysql://sdw2:3306/bigdata_platform_summary?characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  devtools:
+    restart:
+      enabled: true
+
+
+hwinfo:
+  hadoop:
+    nn:
+      uri: mdw:50070
+    rm:
+      uri: mdw:8088
+
+swagger:
+  show: true
