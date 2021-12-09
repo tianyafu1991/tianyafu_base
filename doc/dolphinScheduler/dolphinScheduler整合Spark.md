@@ -1,9 +1,16 @@
-# dolphinScheduler整合CDH Hive
+# dolphinScheduler整合Spark
 
-## 移除dolphinScheduler自带的hive的jar
+## 需要启动Spark的thriftserver
 ```shell
-[admin@sdw2 ~]$ cd ~/app/dolphinscheduler/lib
-[admin@sdw2 lib]$ mv ./hive* /tmp
+sh /application/spark/sbin/start-thriftserver.sh \
+--hiveconf hive.server2.thrift.port=10001 \
+--master yarn \
+--deploy-mode client \
+--name spark_thriftserver_4_test_env \
+--driver-memory 1G \
+--executor-memory 1G \
+--executor-cores 1 \
+--num-executors 2
 
 ```
 
