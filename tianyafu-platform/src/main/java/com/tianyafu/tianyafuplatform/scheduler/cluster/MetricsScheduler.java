@@ -49,7 +49,7 @@ public class MetricsScheduler {
 
 
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 5000*60)
     public void testScheduler(){
 //        logger.info("执行调度的时间为:" + FORMATTER.format(new Date()));
 //        logger.info("nameNode uri:" + nameNodeUri + " | resourceManager uri:" + resourceManagerUri);
