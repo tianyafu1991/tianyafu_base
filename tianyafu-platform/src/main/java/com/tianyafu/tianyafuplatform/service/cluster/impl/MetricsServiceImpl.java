@@ -1,7 +1,9 @@
 package com.tianyafu.tianyafuplatform.service.cluster.impl;
 
 import com.tianyafu.tianyafuplatform.domain.cluster.HDFSSummary;
+import com.tianyafu.tianyafuplatform.domain.cluster.YARNSummary;
 import com.tianyafu.tianyafuplatform.repository.cluster.HDFSSummaryRepository;
+import com.tianyafu.tianyafuplatform.repository.cluster.YARNSummaryRepository;
 import com.tianyafu.tianyafuplatform.service.cluster.MetricsService;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,9 @@ public class MetricsServiceImpl implements MetricsService {
 
     @Resource
     private HDFSSummaryRepository hdfsSummaryRepository;
+
+    @Resource
+    private YARNSummaryRepository yarnSummaryRepository;
 
 
     /**
@@ -43,5 +48,14 @@ public class MetricsServiceImpl implements MetricsService {
     @Override
     public List<HDFSSummary> findHDFSSummaries(Long start, Long end) {
         return hdfsSummaryRepository.findByIsDeletedFalseAndCreateTimeBetweenOrderByCreateTimeAsc(start,end);
+    }
+
+    /**
+     * 添加YARNSummary
+     * @param yarnSummary
+     */
+    @Override
+    public void addYARNSummary(YARNSummary yarnSummary) {
+        yarnSummaryRepository.save(yarnSummary);
     }
 }

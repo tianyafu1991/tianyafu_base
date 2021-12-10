@@ -14,29 +14,29 @@ public class HDFSSummary extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    // 集群hdfs总容量大小
     private Long total;
-
+    // 集群hdfs已使用的容量大小
     private Long dfsUsed;
-
+    // 集群hdfs使用百分比
     private Float percentUsed;
-
+    // 集群hdfs剩余的容量大小
     private Long dfsFree;
-
+    // 集群非hdfs已使用的容量大小
     private Long nonDfsUsed;
-
+    // 总的文件数量
     private Long totalFiles;
-
+    // 总的block数量
     private Long totalBlocks;
-
+    // 丢失的block数量
     private Long missingBlocks;
-
+    // 集群该namespace的hdfs使用容量大小
     private Long blockPoolUsedSpace;
-
+    // 存活的DN数量
     private Integer liveDataNodeNums;
-
+    // 丢失的DN数量
     private Integer deadDataNodeNums;
-
+    // 坏盘的数量
     private Long volumeFailuresTotal;
 
 
