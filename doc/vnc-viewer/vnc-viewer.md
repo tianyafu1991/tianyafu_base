@@ -52,9 +52,9 @@ vim /lib/systemd/system/vncserver@.service
 
 添加下面两行配置
 
- VNCSERVERS="1:admin" // admin为当前用户
+VNCSERVERS="1:admin" // admin为当前用户
 
- VNCSERVERARGS[1]="-geometry 1024x768"  //此处是分辨率设置 根据自己的情况设定
+VNCSERVERARGS[1]="-geometry 1920x1080"  //此处是分辨率设置 根据自己的情况设定
 
 vim ~/.vnc/xstartup
 将最后一行改为

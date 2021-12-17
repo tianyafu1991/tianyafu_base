@@ -21,6 +21,7 @@
       <module>tianyafu-spark-sql</module>
       <module>tianyafu-spark-streaming</module>
       <module>tianyafu-utils</module>
+      <module>tianyafu-kafka</module>
   </modules>
   <packaging>pom</packaging>
 
@@ -261,8 +262,21 @@
       </dependency>
 
       <dependency>
+        <groupId>c3p0</groupId>
+        <artifactId>c3p0</artifactId>
+        <version>0.9.1.1</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.apache.spark</groupId>
         <artifactId>spark-streaming_${scala.tools.version}</artifactId>
+        <version>${spark.version}</version>
+      </dependency>
+
+
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-streaming-kafka-0-10_${scala.tools.version}</artifactId>
         <version>${spark.version}</version>
       </dependency>
 
