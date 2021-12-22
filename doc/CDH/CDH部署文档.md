@@ -82,8 +82,10 @@ server 127.127.1.0 iburst local clock
 #允许哪些网段的机器来同步时间 网段要根据自己的网段设置
 restrict 172.24.88.0 mask 255.255.255.0 nomodify notrap
 
-[root@hadoop001 ~]# systemctl start ntpd
-[root@hadoop001 ~]# systemctl status ntpd
+# 设置开机自启 并启动ntp服务
+[root@hadoop001 ~]# systemctl enable ntpd.service
+[root@hadoop001 ~]# systemctl start ntpd.service
+[root@hadoop001 ~]# systemctl status ntpd.service
 # 验证ntp服务
 [root@hadoop001 ~]# ntpq -p
 
@@ -296,6 +298,9 @@ PS1=`uname -n`":"'$USER'":"'$PWD'":>"; export PS1
 # 编辑/etc/rc.local 追加以下内容
 [root@hadoop001 mysql]# vi /etc/rc.local
 su - mysqladmin -c "/etc/init.d/mysql start --federated"
+
+# 赋权 该文件如果没有执行权限 MySQL开机无法自启动
+[root@hadoop001 mysql]# chmod +x /etc/rc.d/rc.local
 
 # 安装libaio及安装mysql的初始db
 [root@hadoop001 mysql]# yum -y install libaio

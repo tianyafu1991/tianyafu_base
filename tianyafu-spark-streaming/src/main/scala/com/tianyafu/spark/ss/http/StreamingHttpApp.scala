@@ -27,6 +27,7 @@ object StreamingHttpApp extends Logging {
             rdd.foreachPartition(
               partition => {
 //                val httpClient = HttpClientPoolManager.getHttpClient
+                // 最优方式是使用异步的
                 val httpClient = HttpClients.createMinimal(HttpClientPoolManager.getClientConnectionManager())
                 logError(s"...........${httpClient}")
 
