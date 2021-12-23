@@ -51,10 +51,10 @@
 
     <junit.version>4.12</junit.version>
 
-    <hadoop.version>2.6.0-cdh5.16.2</hadoop.version>
+    <hadoop.version>2.6.0-cdh5.16.1</hadoop.version>
     <mysql.version>5.1.47</mysql.version>
 
-    <hive.version>1.1.0-cdh5.16.2</hive.version>
+    <hive.version>1.1.0-cdh5.16.1</hive.version>
 
     <scala.version>2.12.10</scala.version>
     <scala.tools.version>2.12</scala.tools.version>
@@ -63,13 +63,14 @@
 
     <flink.version>1.11.2</flink.version>
 
-    <hbase.version>1.2.0-cdh5.16.2</hbase.version>
 
     <scalikejdbc.version>3.4.0</scalikejdbc.version>
 
     <es.version>7.9.2</es.version>
 
     <redis.version>3.0.1</redis.version>
+
+    <hbase.version>1.2.0-cdh5.16.1</hbase.version>
 
     <slf4j.version>1.7.22</slf4j.version>
     <log4j.version>1.2.17</log4j.version>
@@ -286,6 +287,12 @@
         <groupId>redis.clients</groupId>
         <artifactId>jedis</artifactId>
         <version>${redis.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.hbase</groupId>
+        <artifactId>hbase-client</artifactId>
+        <version>1.2.0-cdh5.16.1</version>
       </dependency>
 
     </dependencies>

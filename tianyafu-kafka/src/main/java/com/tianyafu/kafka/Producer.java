@@ -48,7 +48,7 @@ public class Producer extends Thread {
 
 
     public static void main(String[] args) {
-        new Producer("tianyafu",false).start();
+        new Producer("tyf_kafka_1",false).start();
     }
 }
 

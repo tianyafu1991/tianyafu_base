@@ -5,6 +5,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ConnectionPool {
 
@@ -61,6 +62,18 @@ public class ConnectionPool {
                 connection.close();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
+            }
+        }
+    }
+
+    public static void closeStatement(Statement statement) {
+        if (null != statement) {
+            try {
+                statement.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }finally {
+                statement = null;
             }
         }
     }
