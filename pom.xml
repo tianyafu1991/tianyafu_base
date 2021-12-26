@@ -22,6 +22,7 @@
       <module>tianyafu-spark-streaming</module>
       <module>tianyafu-utils</module>
       <module>tianyafu-kafka</module>
+      <module>tianyafu-hbase</module>
   </modules>
   <packaging>pom</packaging>
 
@@ -294,6 +295,13 @@
         <artifactId>hbase-client</artifactId>
         <version>1.2.0-cdh5.16.1</version>
       </dependency>
+
+      <!--<dependency>
+        <groupId>org.apache.phoenix</groupId>
+        <artifactId>phoenix-client</artifactId>
+        <version>4.14.1-cdh5.16.1</version>
+      </dependency>-->
+
 
     </dependencies>
 
