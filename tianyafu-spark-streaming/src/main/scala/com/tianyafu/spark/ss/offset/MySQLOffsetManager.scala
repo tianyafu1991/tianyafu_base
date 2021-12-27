@@ -1,6 +1,7 @@
 package com.tianyafu.spark.ss.offset
-import com.tianyafu.spark.ss.utils.{ConnectionPool}
+import com.tianyafu.spark.ss.utils.ConnectionPool
 import org.apache.kafka.common.TopicPartition
+import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka010.OffsetRange
 
 import java.sql.{Connection, PreparedStatement, ResultSet}
@@ -8,6 +9,20 @@ import scala.collection.mutable
 
 object MySQLOffsetManager extends OffsetManager[Array[(String, Long)]] {
 
+
+  def generateSelectOffsetSql(selectOffsetSqlPrefix: String, selectOffsetSqlSuffix: String, topics: Array[String]): String = {
+    var selectOffsetSql = selectOffsetSqlPrefix
+    // 有多少topic 就要拼多少 ?
+    topics.map(x => {
+      selectOffsetSql = selectOffsetSql + "?,"
+    })
+    // 去除最后的,
+    if (selectOffsetSql.endsWith(",")) {
+      selectOffsetSql = selectOffsetSql.dropRight(1)
+    }
+    // 加上最后一个括号
+    selectOffsetSql + selectOffsetSqlSuffix
+  }
 
 
 
@@ -18,10 +33,17 @@ object MySQLOffsetManager extends OffsetManager[Array[(String, Long)]] {
    * @param groupId Kafka Consumer group id
    * @return
    */
-  override def obtainOffset(topics: Array[String], groupId: String,obtainOffsetSql:String): mutable.HashMap[TopicPartition, Long] = {
+  override def obtainOffset(topics: Array[String], groupId: String,conf:SparkConf): mutable.HashMap[TopicPartition, Long] = {
     var conn : Connection = null
     var pstmt : PreparedStatement = null
     val fromOffsets = new mutable.HashMap[TopicPartition, Long]()
+
+    val defaultSelectOffsetSqlPrefix = "select * from streaming_offset_stored where group_id = ? and topic in ("
+    val selectOffsetSqlPrefix = conf.get("spark.streaming.select.offset.sql.prefix",defaultSelectOffsetSqlPrefix)
+
+    val selectOffsetSqlSuffix = conf.get("spark.streaming.select.offset.sql.suffix",")")
+    // 生成查询offset的sql
+    val obtainOffsetSql = generateSelectOffsetSql(selectOffsetSqlPrefix, selectOffsetSqlSuffix, topics)
 
     try{
       conn = ConnectionPool.getConnection

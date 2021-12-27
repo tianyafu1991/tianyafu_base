@@ -1,6 +1,7 @@
 package com.tianyafu.spark.ss.offset
 
 import org.apache.kafka.common.TopicPartition
+import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka010.OffsetRange
 
 import scala.collection.mutable
@@ -13,7 +14,7 @@ trait OffsetManager[T] {
    * @param groupId Kafka Consumer group id
    * @return
    */
-  def obtainOffset(topics: Array[String],groupId:String,obtainOffsetSql:String):mutable.HashMap[TopicPartition, Long]
+  def obtainOffset(topics: Array[String],groupId:String,conf:SparkConf):mutable.HashMap[TopicPartition, Long]
 
 
   /**

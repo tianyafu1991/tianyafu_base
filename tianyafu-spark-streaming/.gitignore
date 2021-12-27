@@ -3,6 +3,7 @@
 
 # Log file
 *.log
+!/src/main/scala/
 
 # BlueJ files
 *.ctxt

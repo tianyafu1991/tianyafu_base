@@ -19,19 +19,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 object OffsetApp04ExactlyOnceStoreOffsetWithOwnData extends Logging {
 
 
-  def generateSelectOffsetSql(selectOffsetSqlPrefix: String, selectOffsetSqlSuffix: String, topics: Array[String]): String = {
-    var selectOffsetSql = selectOffsetSqlPrefix
-    // 有多少topic 就要拼多少 ?
-    topics.map(x => {
-      selectOffsetSql = selectOffsetSql + "?,"
-    })
-    // 去除最后的,
-    if (selectOffsetSql.endsWith(",")) {
-      selectOffsetSql = selectOffsetSql.dropRight(1)
-    }
-    // 加上最后一个括号
-    selectOffsetSql + selectOffsetSqlSuffix
-  }
+
 
   def main(args: Array[String]): Unit = {
     val conf: SparkConf = new SparkConf()
@@ -54,14 +42,8 @@ object OffsetApp04ExactlyOnceStoreOffsetWithOwnData extends Logging {
 
     val topics: Array[String] = Array("tyfss", "tyf_kafka_1")
 
-
-    val selectOffsetSqlPrefix = "select * from streaming_offset_stored where group_id = ? and topic in ("
-    val selectOffsetSqlSuffix = ")"
-    // 生成查询offset的sql
-    val selectOffsetSql = generateSelectOffsetSql(selectOffsetSqlPrefix, selectOffsetSqlSuffix, topics)
-    logError(s"从数据库中查询的sql语句为:${selectOffsetSql}")
     // 从MySQL中获取offset信息
-    val fromOffsets = MySQLOffsetManager.obtainOffset(topics, groupId, selectOffsetSql)
+    val fromOffsets = MySQLOffsetManager.obtainOffset(topics, groupId,conf)
 
     for (elem <- fromOffsets) {
       println(s"map:${elem._1}.......${elem._2}")
