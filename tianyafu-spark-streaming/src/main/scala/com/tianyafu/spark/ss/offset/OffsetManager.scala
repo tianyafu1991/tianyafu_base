@@ -24,7 +24,7 @@ trait OffsetManager[T] {
    * @param result 作业的结果集
    * @tparam T
    */
-  def storeResultsAndOffset(offsetRanges: Array[OffsetRange],groupId:String,result:T):Unit
+  def storeResultsAndOffset(offsetRanges: Array[OffsetRange],groupId:String,result:T,conf:SparkConf):Unit
 
 
 

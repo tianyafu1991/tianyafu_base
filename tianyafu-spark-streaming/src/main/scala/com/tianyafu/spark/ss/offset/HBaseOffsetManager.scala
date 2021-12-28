@@ -44,7 +44,7 @@ object HBaseOffsetManager extends OffsetManager[RDD[Sales]] {
     val iter: util.Iterator[Result] = scanner.iterator()
     val hbaseOffsetBeanList = ListBuffer[HBaseOffsetBean]()
     while (iter.hasNext) {
-      println("....................................")
+      //println("....................................")
       val result: Result = iter.next()
       val cells: Array[Cell] = result.rawCells()
       val hbaseOffsetBean = HBaseOffsetBean("", "", "", "", -1, -1L)
@@ -53,7 +53,7 @@ object HBaseOffsetManager extends OffsetManager[RDD[Sales]] {
         val qualifier: String = new String(CellUtil.cloneQualifier(cell))
         val cf: String = new String(CellUtil.cloneFamily(cell))
         val value: String = new String(CellUtil.cloneValue(cell))
-        println(s"rowKey:${rowKey}========cf:${cf}=========qualifier:${qualifier}===========offset:${value}")
+        //println(s"rowKey:${rowKey}========cf:${cf}=========qualifier:${qualifier}===========value:${value}")
         HBaseBean(rowKey, cf, qualifier, value)
       }).map(x => {
         val qualifier: String = x.qualifier
@@ -70,14 +70,30 @@ object HBaseOffsetManager extends OffsetManager[RDD[Sales]] {
       })
       hbaseOffsetBeanList.append(hbaseOffsetBean)
     }
-    println("~~~~~~~~~~~~~~~~~~~~~~")
+    //println("~~~~~~~~~~~~~~~~~~~~~~")
     // 先过滤掉groupId不是本消费者组的 或者topic不是本任务所消费的
-    hbaseOffsetBeanList.filter(x=> {
+    val filteredHbaseOffsetBeanList = hbaseOffsetBeanList.filter(x => {
       x.groupId == groupId && topics.contains(x.topic)
-    }).map(x=>{
+    })
+
+    val resultHashMap = mutable.HashMap[TopicPartition, Long]()
+
+    filteredHbaseOffsetBeanList.map(x=>{
+      // TODO 获取同一个groupId所消费的每个topic每个partition的最大offset
+      //  即以groupId_topic_partition为分组字段 获取组内offset的最大值
+      //  这里因为groupId就是本方法传入的groupId 所以实际是topic_partition为分组字段 求组内的最大offset
+      val key = new TopicPartition(x.topic,x.partitionId)
+      resultHashMap.get(key) match {
+        case Some(offset) => {
+          if(x.offset > offset){
+            resultHashMap.update(key,x.offset)
+          }
+        }
+        case None => resultHashMap.update(key,x.offset)
+      }
 
     })
-    null
+    resultHashMap
   }
 
   /**
@@ -88,7 +104,11 @@ object HBaseOffsetManager extends OffsetManager[RDD[Sales]] {
    * @param result       作业的结果集
    * @tparam T
    */
-  override def storeResultsAndOffset(offsetRanges: Array[OffsetRange], groupId: String, result: RDD[Sales]): Unit = {
+  override def storeResultsAndOffset(offsetRanges: Array[OffsetRange], groupId: String, result: RDD[Sales],conf:SparkConf): Unit = {
+
+    val zk = conf.get("spark.streaming.hbase.zookeeper.quorum", "mdw,sdw1,sdw2")
+    val port = conf.getInt("spark.streaming.hbase.zookeeper.property.clientPort", 2181)
+    val tableName = conf.get("spark.streaming.hbase.table.name", "tyf:tyf_hbase_offset")
 
     val partitionIdOffsetRangeMap: Map[Int, OffsetRange] = offsetRanges.map(x => (x.partition, x)).toMap
     result.foreachPartition(partition => {
@@ -97,8 +117,8 @@ object HBaseOffsetManager extends OffsetManager[RDD[Sales]] {
         val offsetRange: OffsetRange = partitionIdOffsetRangeMap.get(partitionId).get
         // TODO 将业务数据和offset信息写出到HBase中  利用HBase的行事务特性 将offset放在一行数据的另一个columnFamily中
 
-        val conn: Connection = HBaseUtils.getConnection("mdw,sdw1,sdw2", 2181)
-        val table: Table = conn.getTable(TableName.valueOf("tyf:tyf_hbase_offset"))
+        val conn: Connection = HBaseUtils.getConnection(zk, port)
+        val table: Table = conn.getTable(TableName.valueOf(tableName))
 
         val puts = new util.ArrayList[Put]()
 

@@ -102,7 +102,7 @@ object OffsetApp04ExactlyOnceStoreOffsetWithOwnDataClusterApp extends Logging {
         /**
          * 作业的聚合后的结果和本批次Kafka的offset信息一起存储
          */
-        MySQLOffsetManager.storeResultsAndOffset(offsetRanges, groupId, aggResult)
+        MySQLOffsetManager.storeResultsAndOffset(offsetRanges, groupId, aggResult,conf)
       } else {
         logError("该批次没有数据")
       }
