@@ -23,6 +23,7 @@
       <module>tianyafu-utils</module>
       <module>tianyafu-kafka</module>
       <module>tianyafu-hbase</module>
+    <module>tianyafu-spark-remote</module>
   </modules>
   <packaging>pom</packaging>
 
