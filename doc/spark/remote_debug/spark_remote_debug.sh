@@ -12,4 +12,5 @@ spark-submit \
 --driver-java-options "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=6666" \
 --verbose \
 --conf "spark.data.input.path=hdfs:///tmp/tianyafu/tianyafu.txt" \
+--conf "spark.yarn.historyServer.allowTracking=true" \
 /home/admin/lib/tianyafu-spark-remote-1.0.jar
