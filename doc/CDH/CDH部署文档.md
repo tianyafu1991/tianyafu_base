@@ -94,7 +94,9 @@ restrict 172.24.88.0 mask 255.255.255.0 nomodify notrap
 [root@hadoop002 ~]# systemctl disable ntpd
 # 设置crontab 每天0点定时向主节点同步即可
 [root@hadoop002 ~]# crontab -e
-00 00 * * * ntpdate hadoop001
+00 00 * * * /usr/sbin/ntpdate hadoop001
+# 每5分钟同步一次
+*/5 * * * * /usr/sbin/ntpdate hadoop001 & >/dev/null 2>&1
 ```
 ## 部署JDK
 ```shell
