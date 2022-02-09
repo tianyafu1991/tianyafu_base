@@ -1,7 +1,6 @@
 package com.tianyafu.spark.ser
 
-import com.tianyafu.spark.ser.SerApp.getClass
-import com.tianyafu.spark.utils.{DateUtils, FileUtils}
+import com.tianyafu.spark.utils.{FileUtils}
 import org.apache.commons.lang3.time.FastDateFormat
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
