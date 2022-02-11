@@ -1,0 +1,1 @@
+select site,count(1) cnt from default.site group by site;

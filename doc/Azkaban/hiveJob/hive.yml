@@ -1,0 +1,6 @@
+nodes:
+  - name: hive_job_test
+    type: hive
+    config:
+      user.to.proxy: admin
+      hive.script: hive.hql
