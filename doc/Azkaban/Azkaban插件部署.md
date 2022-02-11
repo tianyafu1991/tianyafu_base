@@ -147,6 +147,7 @@ curl -G "sdw2:12321/executor?action=activate" && echo
 
 ## 开发hive job 并测试
 ```
+参考:https://azkaban.readthedocs.io/en/latest/jobTypes.html#hive-type的New Hive Jobtype章节
 见:doc/Azkaban/hiveJob
 ```
 

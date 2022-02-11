@@ -1,0 +1,31 @@
+config:
+  user.to.proxy: admin
+
+nodes:
+  - name: spark_type_job
+    type: spark
+    config:
+      master: yarn
+      execution-jar: lib/big-screen-1.0.jar
+      class: com.hwinfo.big.screen.template.ETLTemplateApp
+      deploy-mode: client
+      name: dm_scientific_decision_project_meeting_dd_f
+      jars: lib/mysql-connector-java-5.1.47.jar
+      driver-memory: 2048M
+      executor-memory: 2048M
+      executor-cores: 2
+      num-executors: 2
+      conf.spark.testing.memory: 2147480000
+      conf.spark.custom.num.partition: 1
+      conf.spark.sql.shuffle.partitions: 1
+      conf.spark.target.table.name: dm_scientific_decision_project_meeting_dd_f
+      conf.spark.hive.db.name: ywjkq_dw
+      params: com.hwinfo.big.screen.dm.dm_scientific_decision_project_meeting_dd_f.DmScientificDecisionProjectMeetingDDF
+  - name: hive_type_job
+    type: hive
+    dependsOn:
+      - spark_type_job
+    config:
+      user.to.proxy: admin
+      hive.script: hive.hql
+      hiveconf.dt: ${dt}

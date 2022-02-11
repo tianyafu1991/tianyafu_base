@@ -27,3 +27,7 @@
 hs_err_pid*
 /.idea/
 /tianyafu_base.iml
+
+!/doc/Azkaban/sparkJob/lib/*.jar
+!/doc/Azkaban/sparkJob/*.zip
+!/doc/Azkaban/hiveJob/*.zip
