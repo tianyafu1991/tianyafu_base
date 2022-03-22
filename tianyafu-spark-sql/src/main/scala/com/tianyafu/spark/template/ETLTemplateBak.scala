@@ -7,7 +7,7 @@ import org.apache.spark.sql.SparkSession
 /**
  * 模板模式封装的ETLTemplate
  */
-trait ETLTemplate {
+trait ETLTemplateBak {
 
   def setup(): Unit = {
     println("set up...................")
