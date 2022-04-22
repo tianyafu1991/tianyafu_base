@@ -467,6 +467,11 @@ hadoop001:mysqladmin:/usr/local/mysql:>service mysql stop
 ```shell
 # 1. 页面部署
 # 2. Hive元数据库表的字符集修改
+
+-- 修改建库时的库注释的字符集
+alter table dbs default character set utf8 COLLATE utf8_general_ci; -- 库信息相关表
+alter table dbs modify `DESC` varchar(4000) character set utf8 COLLATE utf8_general_ci; -- 修复表字段注释中文乱码问题
+
 -- 修改表的字符集
 alter table columns_v2 default character set utf8 COLLATE utf8_general_ci; -- 表字段信息相关表
 alter table table_params default character set utf8 COLLATE utf8_general_ci; -- 表属性相关表
