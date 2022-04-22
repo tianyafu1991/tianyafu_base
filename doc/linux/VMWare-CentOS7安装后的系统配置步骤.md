@@ -122,7 +122,7 @@ admin
 # 切换用户
 [admin@base ~]$ sudo su -
 # 安装依赖
-[root@base ~]# yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel gcc
+[root@base ~]# yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel gcc gcc-c++
 [root@base src]# cd /usr/local/src/
 [root@base src]# wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz
 [root@base src]# tar xf /usr/local/src/Python-3.6.5.tgz
@@ -139,7 +139,27 @@ admin
 [global]
 trusted-host =  pypi.douban.com
 index-url = http://pypi.douban.com/simple
+
+# 安装必要的包
+yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel.x86_64 cyrus-sasl-devel.x86_64 mysql-devel python3-devel.x86_64
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ numpy==1.15.4
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pandas==0.23.4
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ interval3==2.0.0
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ PyHive==0.6.1
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pymssql==2.1.4
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ PyMySQL==0.9.3
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ python-dateutil==2.7.5
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pytz==2018.7
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ six==1.12.0
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ thrift==0.11.0
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ psycopg2-binary==2.8.2
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ thrift-sasl==0.3.0
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ sasl==0.2.1
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ requests==2.19.1
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ sqlalchemy==1.2.11
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pyquery==1.4.3
 ```
+
 
 
 
@@ -159,7 +179,7 @@ index-url = http://pypi.douban.com/simple
 # 配置信任关系
 [admin@tianyafu ~]$ cd
 [admin@tianyafu ~]$ rm -rf ~/.ssh
-[admin@tianyafu ~]$ ssh-keygen
+[admin@tianyafu ~]$ ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 [admin@tianyafu ~]$ cd ~/.ssh/
 [admin@tianyafu .ssh]$ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 [admin@tianyafu .ssh]$ chmod 0600 ~/.ssh/authorized_keys

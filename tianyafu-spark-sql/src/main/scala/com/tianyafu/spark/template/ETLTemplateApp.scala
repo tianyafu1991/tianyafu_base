@@ -39,7 +39,6 @@ object ETLTemplateApp extends App {
   val etlMethod: String = "etl"
   val setupMethod: String = "setup"
   val cleanupMethod: String = "cleanup"
-  val baseTrait: String = "ETLTemplate"
 
   /**
    * 总结：
@@ -91,17 +90,9 @@ object ETLTemplateApp extends App {
    */
   @throws(classOf[Exception])
   def invoke(classInfo: (ru.Mirror, ru.Type, ru.MethodMirror), methodName: String): Unit = {
-    //通过class Type获取method Symbol
-    var methodSymbol: ru.MethodSymbol = null
-    // 判断当前类中能不能获取到methodName
-    if (classInfo._2.decl(ru.TermName(methodName)).isMethod) {
-      // 获取到了methodName就拿到MethodSymbol
-      methodSymbol = classInfo._2.decl(ru.TermName(methodName)).asMethod
-    } else {
-      // 否则从当前类的父类中去获取methodName
-      val symbols: List[ru.Symbol] = classInfo._2.baseClasses.filter(_.fullName.contains(baseTrait))
-      methodSymbol = symbols(0).asType.toType.decl(ru.TermName(methodName)).asMethod
-    }
+    //通过class Type获取method Symbol 先从子类中去找 如果子类中重写了父类的方法 就能找到 如果没有重写 就从父trait ETLTemplate中获取方法
+    val methodSymbol: ru.MethodSymbol = if (classInfo._2.decl(ru.TermName(methodName)).isMethod)
+      classInfo._2.decl(ru.TermName(methodName)).asMethod else ru.typeOf[ETLTemplate].decl(ru.TermName(methodName)).asMethod
     //通过class constructor获取instance Mirror
     val im: ru.InstanceMirror = classInfo._1.reflect(classInfo._3())
     ////使用instance Mirror通过实例镜像获取method Mirror

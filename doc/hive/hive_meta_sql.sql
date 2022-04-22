@@ -1,21 +1,24 @@
 -- 查询表的数据字典的元数据信息
-SELECT
-a.TBL_NAME
-,e.PARAM_VALUE
-,b.COLUMN_NAME
-,b.TYPE_NAME
-,b.`COMMENT`
-,b.INTEGER_IDX
-FROM
+
+select
+a.tbl_name
+,e.param_value tbl_comment
+,b.column_name
+,b.type_name column_type
+,b.`comment` column_comment
+,b.integer_idx
+from
 tbls a
-LEFT JOIN columns_v2 b ON a.TBL_ID = b.CD_ID
-left join dbs c on a.DB_ID = c.DB_ID
-left join (select TBL_ID,PARAM_VALUE from table_params where PARAM_KEY = 'comment') e on a.TBL_ID = e.TBL_ID
-WHERE
-c.`NAME` = 'ywjkq_dw'
-and a.TBL_NAME = 'dm_excellent_enterprise_honor_wall_yy_f'
-ORDER BY
-b.INTEGER_IDX;
+left join sds d on a.sd_id = d.sd_id
+left join columns_v2 b on d.cd_id = b.cd_id
+left join dbs c on a.db_id = c.db_id
+left join (select tbl_id,param_value from table_params where param_key = 'comment') e on a.tbl_id = e.tbl_id
+where
+c.`name` = 'sxf_dw'
+and a.tbl_name = 'dim_caller_id_map_dd_f'
+order by
+a.tbl_name,b.integer_idx
+;
 
 -- 查询表的元数据信息
 SELECT
