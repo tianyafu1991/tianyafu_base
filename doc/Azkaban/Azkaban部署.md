@@ -32,10 +32,10 @@
 ## 创建Azkaban元数据库
 ```
 [admin@sdw2 app]$ sudo su - mysqladmin
-mysql> create database azkaban default character set utf8;
+mysql> create database azkaban default character set utf8 DEFAULT COLLATE utf8_general_ci;
 Query OK, 1 row affected (0.00 sec)
 
-mysql> grant all privileges on azkaban.* to root@'%' identified by 'root';
+mysql> grant all privileges on azkaban.* to azkaban@'%' identified by 'azkaban';
 Query OK, 0 rows affected, 1 warning (0.00 sec)
 
 mysql> flush PRIVILEGES;
