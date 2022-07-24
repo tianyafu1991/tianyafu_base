@@ -11,5 +11,14 @@
 
     <artifactId>tianyafu-scala</artifactId>
 
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.huaban/jieba-analysis -->
+        <dependency>
+            <groupId>com.huaban</groupId>
+            <artifactId>jieba-analysis</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+    </dependencies>
+
 
 </project>

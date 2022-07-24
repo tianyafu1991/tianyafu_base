@@ -20,7 +20,7 @@
 
 ## yum安装一些必要的工具
 ```
-[root@mdw ~]# yum install -y net-tools.x86_64 vim lrzsz lsof wget screen tree ntpdate unzip
+[root@mdw ~]# yum install -y net-tools.x86_64 vim lrzsz lsof wget screen tree ntpdate zip unzip telent dos2unix traceroute
 ```
 
 ## 固定IP
@@ -70,7 +70,7 @@ DNS1=114.114.114.114
 [root@base ~]# wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
 
 # 安装一些常用的命令
-yum install -y zip unzip lrzsz lsof telent dos2unix
+yum install -y 
 ```
 
 ## 时间同步
@@ -135,7 +135,6 @@ admin
 [root@base Python-3.6.8]# ln -s /usr/local/python3.6.8 /usr/local/python3
 [root@base Python-3.6.8]# echo -e '# Python PATH\nexport PATH=$PATH:/usr/local/python3/bin' >>/etc/profile
 [root@base Python-3.6.8]# source /etc/profile
-[root@base Python-3.6.8]# python3 -m pip install --upgrade pip
 
 # 优化PIP源
 [root@base Python-3.6.5]# vim /etc/pip.conf
@@ -143,31 +142,38 @@ admin
 trusted-host =  pypi.douban.com
 index-url = http://pypi.douban.com/simple
 
+# 升级pip
+[root@base Python-3.6.8]# python3 -m pip install --upgrade pip
+
 # 安装必要的包
 yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel.x86_64 cyrus-sasl-devel.x86_64 mysql-devel python3-devel.x86_64
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ numpy==1.19.5
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pandas==0.23.4
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ interval3==2.0.0
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ PyHive==0.6.1
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pymssql==2.1.4
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ PyMySQL==0.9.3
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ thrift==0.15.0
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ psycopg2-binary==2.8.2
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ thrift-sasl==0.4.3
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ sasl==0.2.1
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ requests==2.19.1
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ sqlalchemy==1.2.11
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pyquery==1.4.3
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ cx_Oracle==8.2.1
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ openpyxl==3.0.9
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pyhdfs==0.3.1
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ cn2an==0.5.11
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ psutil==5.8.0
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ python-docx==0.8.11
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ tqdm==4.62.3
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ xlrd==1.1.0
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ wheel==0.37.1
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ memory_profiler==0.59.0(这个在windows上装不上)
+pip3 install -i http://pypi.douban.com/simple numpy==1.19.5
+pip3 install -i http://pypi.douban.com/simple pandas==0.23.4
+pip3 install -i http://pypi.douban.com/simple interval3==2.0.0
+pip3 install -i http://pypi.douban.com/simple PyHive==0.6.1
+pip3 install -i http://pypi.douban.com/simple pymssql==2.1.4
+pip3 install -i http://pypi.douban.com/simple PyMySQL==0.9.3
+pip3 install -i http://pypi.douban.com/simple thrift==0.15.0
+pip3 install -i http://pypi.douban.com/simple psycopg2-binary==2.8.2
+pip3 install -i http://pypi.douban.com/simple thrift-sasl==0.4.3
+pip3 install -i http://pypi.douban.com/simple sasl==0.2.1
+pip3 install -i http://pypi.douban.com/simple requests==2.19.1
+pip3 install -i http://pypi.douban.com/simple sqlalchemy==1.2.11
+pip3 install -i http://pypi.douban.com/simple pyquery==1.4.3
+pip3 install -i http://pypi.douban.com/simple cx_Oracle==8.2.1
+pip3 install -i http://pypi.douban.com/simple openpyxl==3.0.9
+pip3 install -i http://pypi.douban.com/simple pyhdfs==0.3.1
+pip3 install -i http://pypi.douban.com/simple cn2an==0.5.11
+pip3 install -i http://pypi.douban.com/simple psutil==5.8.0
+pip3 install -i http://pypi.douban.com/simple python-docx==0.8.11
+pip3 install -i http://pypi.douban.com/simple tqdm==4.62.3
+pip3 install -i http://pypi.douban.com/simple xlrd==1.1.0
+pip3 install -i http://pypi.douban.com/simple wheel==0.37.1
+pip3 install -i http://pypi.douban.com/simple jieba==0.42.1
+
+pip3 install -U scikit-learn
+
+pip3 install -i http://pypi.douban.com/simple memory_profiler==0.59.0(这个在windows上装不上)
 需要以下安装步骤
 1.解压
 2.python C:\Users\PC\Desktop\memory_profiler-0.59.0\memory_profiler-0.59.0\setup.py install
@@ -177,8 +183,7 @@ pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pyspark==2.4.6
 或者使用tar.gz包安装 pip3 install pyspark-2.4.6.tar.gz
 
 算法用的库:
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ tqdm==4.62.3
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ sshtunnel==0.4.0
+pip3 install -i http://pypi.douban.com/simple sshtunnel==0.4.0
 
 ```
 

@@ -28,7 +28,7 @@ HADOOP_CONF_DIR=/etc/hadoop/conf
 
 ## 配置环境变量
 ```shell
-[root@hadoop001 conf]# echo -e '# SPARK ENV\nexport SPARK_HOME=/root/app/spark\nexport PATH=$SPARK_HOME/bin:$PATH' >> /etc/profile
+[root@hadoop001 conf]# echo -e '# SPARK ENV\nexport SPARK_HOME=/root/app/spark\nexport PATH=$SPARK_HOME/bin:$PATH\nexport PYSPARK_PYTHON=python3' >> /etc/profile
 [root@hadoop001 conf]# source /etc/profile
 ```
 
