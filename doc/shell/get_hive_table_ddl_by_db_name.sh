@@ -15,7 +15,7 @@ hive -e "use ${DB};
 sleep 1
 cat hive_db_tables.txt | while read eachline
 do
-hive -e "use ${DB}; show create table ${eachline};" >> ${RESULT_SQL_FILE}
+hive -e "use ${DB}; show create table ${DB}.${eachline};" >> ${RESULT_SQL_FILE}
 echo -e ';\n--------' >> ${RESULT_SQL_FILE}
 done
 
