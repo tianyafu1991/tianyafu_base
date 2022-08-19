@@ -105,3 +105,24 @@ OK
 # 端口映射 -p外部映射后的端口:容器内部的端口
 [root@hadoop01 ~]# docker run -d -p8890:80 --name tyf_nginx nginx
 ```
+
+## MySQL镜像启动容器
+```shell
+docker run \
+--name tyf-mysql \
+-p23306:3306 \
+-e MYSQL_ROOT_PASSWORD=123456 \
+-v /tmp/tianyafu/tyf_mysql/data:/var/lib/mysql \
+-d mysql:5.7.26 \
+--character-set-server=utf8mb4 \
+--collation-server=utf8mb4_unicode_ci
+
+CREATE DATABASE IF NOT EXISTS tianyafu DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
+create table if not exists user(id int primary key auto_increment comment '主键自增',name varchar(255) comment '姓名') ENGINE=INNODB comment '用户表';
+
+insert into user(name) values('张三');
+insert into user(name) values('李四');
+insert into user(name) values('wangwu');
+
+select * from user;
+```
