@@ -179,7 +179,7 @@ export PATH=${AZKABAN_EXECUTOR_HOME}/bin:$PATH
 ```shell
 # 各个节点启动executor
 [admin@sdw2 app]$ cd $AZKABAN_EXECUTOR_HOME
-    [admin@sdw2 azkaban-exec-server]$ ./bin/start-exec.sh
+[admin@sdw2 azkaban-exec-server]$ sh ./bin/start-exec.sh
 ```
 
 

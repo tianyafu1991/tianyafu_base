@@ -20,7 +20,7 @@
 
 ## yum安装一些必要的工具
 ```
-[root@mdw ~]# yum install -y net-tools.x86_64 vim lrzsz lsof wget screen tree ntpdate zip unzip telent dos2unix traceroute
+[root@mdw ~]# yum install -y net-tools.x86_64 vim lrzsz lsof wget screen tree ntpdate zip unzip telent dos2unix traceroute nmap htop iotop iftop telnet
 ```
 
 ## 固定IP

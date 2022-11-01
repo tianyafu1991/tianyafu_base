@@ -23,6 +23,12 @@ CDH官方是对JDK的版本有推荐  推荐版本是CDH经过测试的 最佳�
 
 ```
 
+## 安装必要的包
+```shell
+# 部分机器上碰到启动CM Server和 CM Agent 时 报pstree command not found 需要先在服务器上安装psmisc
+[root@hadoop001 ~]# yum install -y psmisc
+```
+
 ## 集群节点初始化配置
 ```
 # 配置hosts文件
