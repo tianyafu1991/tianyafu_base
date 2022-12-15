@@ -482,6 +482,7 @@ alter table dbs modify `DESC` varchar(4000) character set utf8 COLLATE utf8_gene
 alter table columns_v2 default character set utf8 COLLATE utf8_general_ci; -- 表字段信息相关表
 alter table table_params default character set utf8 COLLATE utf8_general_ci; -- 表属性相关表
 alter table partition_keys default character set utf8 COLLATE utf8_general_ci; -- 分区key相关表
+alter table tbls default character set utf8 COLLATE utf8_general_ci; -- Hive表信息相关表
 
 
 
@@ -489,6 +490,11 @@ alter table partition_keys default character set utf8 COLLATE utf8_general_ci; -
 alter table columns_v2 modify `COMMENT` varchar(256) character set utf8 COLLATE utf8_general_ci; -- 修复表字段注释中文乱码问题
 alter table table_params modify `PARAM_VALUE` varchar(4000) character set utf8 COLLATE utf8_general_ci; -- 修复表注释中文乱码问题
 alter table partition_keys modify `PKEY_COMMENT` varchar(4000) character set utf8 COLLATE utf8_general_ci; -- 修复分区字段注释中文乱码问题
+
+-- 视图DDL语句的字符集
+alter table tbls modify `VIEW_EXPANDED_TEXT` mediumtext character set utf8 COLLATE utf8_general_ci; -- 修复视图DDL中文乱码问题
+alter table tbls modify `VIEW_ORIGINAL_TEXT` mediumtext character set utf8 COLLATE utf8_general_ci; -- 修复视图DDL中文乱码问题
+
 # 3. 参数优化
 3.1 metastore 和 hiveServer2的java heap默认只有50M  改为为1G
 3.2 hive.fetch.task.conversion参数设置为more

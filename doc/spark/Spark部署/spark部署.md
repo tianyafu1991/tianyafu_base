@@ -13,11 +13,27 @@
 [root@hadoop001 conf]# cp spark-defaults.conf.template spark-defaults.conf
 [root@hadoop001 conf]# cp spark-env.sh.template spark-env.sh
 [root@hadoop001 conf]# cp log4j.properties.template log4j.properties
-
+# 配置spark-env.sh
 [root@hadoop001 conf]# vim spark-env.sh
 SPARK_LOCAL_IP=hadoop001
 HADOOP_CONF_DIR=/etc/hadoop/conf
+# 软连接hive-site.xml
 [root@hadoop001 conf]# ln -s /etc/hive/conf/hive-site.xml hive-site.xml
+
+# 将spark的jars目录下的jar 打成一个压缩包 并上传到hdfs上
+[root@hadoop001 conf]# cd ~/app/spark/jars/
+[root@hadoop001 jars]# zip -r spark-jars.zip ./*.jar
+[root@hadoop001 jars]# zip -r spark-jars.zip ./*.jar
+[root@hadoop001 jars]# hdfs dfs -mkdir /spark_jars
+[root@hadoop001 jars]# hdfs dfs -put spark-jars.zip /spark_jars
+[root@hadoop001 jars]# cd ~/app/spark/conf/
+# 配置spark-defaults.conf
+[root@hadoop001 conf]# vim spark-defaults.conf
+# add by tianyafu@20221213  这是一种优化 spark任务在执行时 会将$SPARK_HOME/jars下面的jar包 打成一个临时zip包 上传到HDFS上 如果每个任务执行时 都需要这一步 浪费网络资源 所以将$SPARK_HOME/jars下面的jar包 统一打成一个zip包 上传到HDFS上 这样Spark任务在检测到有该参数后 就不会再将jar包打成临时zip包并上传了
+# 也可以通过配置spark.yarn.jars参数实现该优化 spark.yarn.jars这个参数要的是一个hdfs的路径 所以把jar包上传到该hdfs路径下即可
+spark.yarn.archive hdfs:///spark_jars/spark-jars.zip
+#spark.yarn.jars    hdfs:///tmp/tianyafu/spark-jars/*.jar
+
 ```
 
 ## 分发
