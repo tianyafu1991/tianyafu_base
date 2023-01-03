@@ -1,0 +1,1 @@
+hive --debug -hiveconf hive.root.logger=WARN,CONSOLE

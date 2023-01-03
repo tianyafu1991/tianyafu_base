@@ -164,6 +164,8 @@ pip3 install -i https://mirrors.aliyun.com/pypi/simple/ tqdm==4.62.3
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ sshtunnel==0.4.0
 pip3 install --upgrade nni --ignore-installed -i https://mirrors.aliyun.com/pypi/simple/ PyYAML==5.4.1
 pip3 install --upgrade nni --ignore-installed -i https://mirrors.aliyun.com/pypi/simple/ cn2an==0.5.11
+
+pip3 install selenium -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
 ```
 
 

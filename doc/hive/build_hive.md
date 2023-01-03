@@ -2,6 +2,7 @@
 
 ## 参考博客
 ```
+官方文档：https://cwiki.apache.org/confluence/display/Hive//GettingStarted#GettingStarted-BuildingHivefromSource
 https://blog.csdn.net/qq_43081842/article/details/105728262
 https://juejin.cn/post/6859995459503685639
 ```
@@ -37,7 +38,7 @@ hive.version=1.1.0-cdh5.16.2
 </repository>
 
 2.执行编译命令
-mvn clean package -DskipTests=true -Phadoop-2
+mvn clean package -DskipTests -Dmaven.javadoc.skip=true -Pdist -Phadoop-2
 编译没有坑 
 期间因网络原因 部分jar包可能拉取不下来
 本次编译遇到如下报错
@@ -49,6 +50,38 @@ mvn clean package -DskipTests=true -Phadoop-2
 提取码：wfbw 
 
 ```
+
+## 源码导入IDEA并利用antlr生成代码
+```
+1.解决IDEA右侧maven工具栏依赖报红
+源码导入IDEA后 IDEA右侧maven工具栏中Hive Service模块会报红 具体为org.apache.directory.server:apacheds-server-integ:1.5.6中缺少一个依赖jar(org.apache.directory.client.ldap:ldap-client-api:0.1-SNAPSHOT)
+该依赖是下不下来的
+解决方式:因org.apache.directory.server:apacheds-server-integ:1.5.6的scope本身即为test的 所以直接利用exclusions标签 将缺少的org.apache.directory.client.ldap:ldap-client-api排掉
+
+打开Hive Service模块的pom.xml文件 
+搜索apacheds-server-integ
+在该依赖下添加:
+<exclusions>
+    <exclusion>
+      <groupId>org.apache.directory.client.ldap</groupId>
+      <artifactId>ldap-client-api</artifactId>
+    </exclusion>
+</exclusions>
+然后刷新依赖 即可发现maven工具栏不再报红
+
+2.生成源代码
+IDEA右侧maven工具栏 
+1).找到Hive Metastore 右键 Generate Sources and Update Folders
+2).找到Hive Query Language 右键 Generate Sources and Update Folders
+会根据HiveParser.g、HiveLexer.g等文件生成HiveParser等类， 这个是Antlr生成的 前提是IDEA中 安装Antlr插件
+```
+
+## 远程调试
+```
+调试的入口类 CliDriver
+```
+
+
 
 ## 源码导入IDEA并本地调试
 ```
