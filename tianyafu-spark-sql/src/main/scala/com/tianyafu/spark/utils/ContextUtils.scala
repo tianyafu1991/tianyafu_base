@@ -26,6 +26,7 @@ object ContextUtils {
   }
 
   def remove(): Unit = {
+    get().stop()
     sparkThreadLocal.remove()
     hdfsThreadLocal.remove()
   }

@@ -72,8 +72,9 @@ mvn clean package -DskipTests -Dmaven.javadoc.skip=true -Pdist -Phadoop-2
 2.生成源代码
 IDEA右侧maven工具栏 
 1).找到Hive Metastore 右键 Generate Sources and Update Folders
+会根据Filter.g文件生成FilterLexer、FilterParser 生成的文件在target目录中 这个是Antlr生成的 前提是IDEA中 安装Antlr插件
 2).找到Hive Query Language 右键 Generate Sources and Update Folders
-会根据HiveParser.g、HiveLexer.g等文件生成HiveParser等类， 这个是Antlr生成的 前提是IDEA中 安装Antlr插件
+会根据HiveParser.g、HiveLexer.g等文件生成HiveParser等类 生成的文件在target目录中， 这个是Antlr生成的 前提是IDEA中 安装Antlr插件
 ```
 
 ## 远程调试

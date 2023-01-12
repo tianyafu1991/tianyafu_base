@@ -23,6 +23,7 @@ trait ETLTemplate {
     ContextUtils.set(spark)
   }
 
+  @throws[Exception]
   def etl()
 
   def cleanup(): Unit = {
