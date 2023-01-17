@@ -193,7 +193,7 @@ curl -G "sdw2:12321/executor?action=activate" && echo
 ## 启动web
 ```shell
 [admin@sdw2 azkaban-exec-server]$ cd $AZKABAN_WEB_HOME
-[admin@sdw2 azkaban-web-server]$ ./bin/start-web.sh
+[admin@sdw2 azkaban-web-server]$ sh ./bin/start-web.sh
 ```
 
 ## 关闭Azkaban集群
