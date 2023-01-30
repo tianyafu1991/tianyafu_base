@@ -1,1 +1,1 @@
-hive --debug -hiveconf hive.root.logger=WARN,CONSOLE
+hive --debug -hiveconf hive.root.logger=WARN,CONSOLE -hiveconf hive.cli.prompt=tyf

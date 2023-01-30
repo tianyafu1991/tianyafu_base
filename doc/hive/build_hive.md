@@ -80,6 +80,11 @@ IDEA右侧maven工具栏
 ## 远程调试
 ```
 调试的入口类 CliDriver
+1.IDEA中新增一个Remote JVM Debug ,给个name , 填写Host 和 Port , Port填写8000
+2.服务器上通过hive --debug -hiveconf hive.root.logger=WARN,CONSOLE命令 启动hive 的 shell命令客户端, 此时会停留在监听8000端口的地方
+3.IDEA中debug启动第1步新增的Remote JVM Debug即可
+4.在调试的入口类中 找到main方法 即可远程调试
+
 ```
 
 
