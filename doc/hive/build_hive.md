@@ -87,125 +87,42 @@ IDEA右侧maven工具栏
 
 ```
 
-
-
-## 源码导入IDEA并本地调试
+## 本地调试
 ```
-1.服务器上编译好的源码 拉取下来后 最好在windows本地也编译一次 
 2.启动Hadoop
 3.启动Hive的metastore nohup ~/app/hive/bin/hive --service metastore &
-4.在Hive源码的cli子module中 创建resources目录并标记为source root
-5.将服务器上的hdfs-site.xml、core-site.xml、yarn-site.xml、mapred-site.xml、hive-site.xml放到创建的resources目录下
-6.在hdfs-site.xml中 加上如下配置 该参数是为了客户端使用hostname去访问datanode 不加该参数 会出现在本地执行sql语句时 卡住没有任何结果
+4.在Hive源码的cli子module中 创建resources目录并标记为resource root (这一步可不做)
+5.将服务器上的hdfs-site.xml、core-site.xml、hive-site.xml放到创建的resources目录下 (这一步可不做)
+6.如果第4步和第5步不做 则直接将hdfs-site.xml、core-site.xml、hive-site.xml这3个文件 加入到工程ql子Module的target目录下的classes目录中
+hdfs-site.xml
 <property>
-<name>dfs.client.use.datanode.hostname</name>
-<value>true</value>
-</property>
-7.服务器上的配置文件中 很多配置在本地调试过程中都可以删掉 因为很多是服务器端的配置 具体保留的配置在下方单独记录
-8.找到org.apache.hadoop.hive.cli.CliDriver这个类 找到main方法 在main方法启动的参数中 加入-Djline.WindowsTerminal.directConsole=false
-9.启动CliDriver的main方法 这样是起不来的 会报org.apache.hadoop.hive.conf.HiveConf类中 有个import org.apache.hadoop.mapred.JobConf;无法导入
-这个是需要在idea右侧的maven中的Profiles中勾选hadoop-2这个profile
-10.再次启动 还是起不来 org.apache.hive.service.servlet.QueryProfileServlet类中 import org.apache.hive.tmpl.QueryProfileTmpl; 无法导入
-这个网上没有找到博客或issue对该问题进行说明 暂时不清楚是否有影响 这里直接将报错的import注释掉 下面的代码中用到该import的那行代码也注释掉
-new QueryProfileTmpl().render(response.getWriter(), queryInfo, hiveConf);
-11.再次启动 可以正常启动了
-show databases;
-use dw;
-select * from dw.dm_enterprise_list_dd_f limit 1;
-select status_code,count(1) cnt from dw.dm_enterprise_list_dd_f group by status_code; 
-12.可以执行select * from dw.dm_enterprise_list_dd_f limit 1;这类没有shuffle的语句 但不能执行select status_code,count(1) cnt from dw.dm_enterprise_list_dd_f group by status_code; 
-debug跟踪源码 发现是本地的yarn-site.xml需要添加yarn.resourcemanager.hostname参数 这个参数不加 默认是从yarn-default.xml中获取 默认值为0.0.0.0 而我现在是idea连接vmware上的ResourceManager
-13.本地的yarn-site.xml添加yarn.resourcemanager.hostname后 再次启动 执行select status_code,count(1) cnt from dw.dm_enterprise_list_dd_f group by status_code; 
-日志报错：FAILED: Execution Error, return code 2 from org.apache.hadoop.hive.ql.exec.mr.MapRedTask
-通过ResourceManager的web页面看到报错Exception message: /bin/bash: 第 0 行:fg: 无任务控制
-参考：https://blog.csdn.net/weixin_40453404/article/details/103383330博客 在mapred-site.xml中添加参数 这个要在服务器端的mapred-site.xml中添加 添加后重启Hadoop。 顺便本地也加一下 不加依然包这个错
-14.再次启动 又报错
-通过ResourceManager的web页面看到报错java.lang.RuntimeException: java.lang.ClassNotFoundException: Class org.apache.hadoop.hive.ql.io.HiveFileFormatUtils$NullOutputCommitter not found
-暂未解决
-```
-### hdfs-site.xml
-```
-<configuration>
-<property>
-<name>dfs.replication</name>
-<value>1</value>
+    <name>dfs.client.use.datanode.hostname</name>
+    <value>true</value>
 </property>
 <property>
-<name>dfs.namenode.secondary.http-address</name>
-<value>tianyafu:9868</value>
-</property>
-<property>
-<name>dfs.namenode.secondary.https-address</name>
-<value>tianyafu:9869</value>
-</property>
-<property>
-<name>dfs.client.use.datanode.hostname</name>
-<value>true</value>
-</property>
-</configuration>
-```
-
-### core-site.xml
-```
-<configuration>
-<property>
-<name>fs.defaultFS</name>
-<value>hdfs://tianyafu:9000</value>
-</property>
-</configuration>
-```
-
-### yarn-site.xml
-```
-<configuration>
-
-<!-- Site specific YARN configuration properties -->
-
-<property>
-<name>yarn.nodemanager.aux-services</name>
-<value>mapreduce_shuffle</value>
-</property>
-<property>
-<name>yarn.resourcemanager.hostname</name>
-<value>tianyafu</value>
-</property>
-<property>
-<name>yarn.resourcemanager.webapp.address</name>
-<value>tianyafu:18088</value>
+    <name>dfs.replication</name>
+    <value>3</value>
 </property>
 
-
-</configuration>
-```
-
-### mapred-site.xml
-```
-<configuration>
+core-site.xml
 <property>
-<name>mapreduce.framework.name</name>
-<value>yarn</value>
+    <name>fs.defaultFS</name>
+    <value>hdfs://mdw:8020</value>
 </property>
 
-</configuration>
-```
-
-
-### hive-site.xml
-```
-<configuration>
+hive-site.xml
 <property>
-<name>hive.cli.print.current.db</name>
-<value>true</value>
-<description>打印当前hive库名</description>
+    <name>hive.metastore.uris</name>
+    <value>thrift://mdw:9083</value>
 </property>
-<property>
-<name>hive.cli.print.header</name>
-<value>true</value>
-<description>打印当前hive表字段名</description>
-</property>
-<property>
-<name>hive.metastore.uris</name>
-<value>thrift://tianyafu:9083</value>
-</property>
-</configuration>
+7.找到org.apache.hadoop.hive.cli.CliDriver这个类 运行main方法
+8.此时第7步无法启动 因org.apache.hive.service.servlet.QueryProfileServlet中导入的包import org.apache.hive.tmpl.QueryProfileTmpl;无法找到
+在工程的service子Module的中，将src下的jamon目录Mark Directory as Sources Root 通过右侧maven导航栏中对Hive Service进行右键Generate Sources 
+即可在target目录下 找到generated-jamon目录 将该目录下的QueryProfileTmpl等2个java文件 拷贝到src下的jamon目录中 即可解决org.apache.hive.service.servlet.QueryProfileServlet包导入报错的问题
+9.再次运行org.apache.hadoop.hive.cli.CliDriver这个类的main方法 能启动
+10.执行show databases; 控制台不会出结果。需要在main方法启动的参数中 加入-Djline.WindowsTerminal.directConsole=false 表示在Windows下不使用jline
+11.执行show databases;出结果
+11.执行show tables;出结果
+11.执行select * from tyf_db.dim_date_ids_yy_i limit 1;出结果
+11.执行select flag_of_holiday_id,count(1) cnt from tyf_db.dim_date_ids_yy_i group by flag_of_holiday_id;出结果
 ```
