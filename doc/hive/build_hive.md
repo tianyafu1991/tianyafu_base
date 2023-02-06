@@ -122,7 +122,13 @@ hive-site.xml
 9.再次运行org.apache.hadoop.hive.cli.CliDriver这个类的main方法 能启动
 10.执行show databases; 控制台不会出结果。需要在main方法启动的参数中 加入-Djline.WindowsTerminal.directConsole=false 表示在Windows下不使用jline
 11.执行show databases;出结果
-11.执行show tables;出结果
-11.执行select * from tyf_db.dim_date_ids_yy_i limit 1;出结果
-11.执行select flag_of_holiday_id,count(1) cnt from tyf_db.dim_date_ids_yy_i group by flag_of_holiday_id;出结果
+12.执行show tables;出结果
+13.执行select * from tyf_db.dim_date_ids_yy_i limit 1;出结果
+14.执行select flag_of_holiday_id,count(1) cnt from tyf_db.dim_date_ids_yy_i group by flag_of_holiday_id;出结果
+15.部分机器中 第14步可能会报错org.apache.hadoop.io.nativeio.NativeIO$Windows.access0(Ljava/lang/String;I)Z 
+参考https://stackoverflow.com/questions/41851066/exception-in-thread-main-java-lang-unsatisfiedlinkerror-org-apache-hadoop-io 
+将winutils解压到$HADOOP_HOME/bin目录下并将hadoop.dll放到C:\Windows\System32
+16.执行select a.empno,a.ename,a.deptno,b.dname from tyf_db.emp a left join tyf_db.dept b on a.deptno = b.deptno; 报错
+java.lang.NoClassDefFoundError: org/apache/commons/io/IOUtils
+ERROR ql.Driver: FAILED: Execution Error, return code -101 from org.apache.hadoop.hive.ql.exec.mr.MapredLocalTask. org/apache/commons/io/IOUtils
 ```
