@@ -124,18 +124,18 @@ admin
 # 安装依赖
 [root@base ~]# yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel gcc gcc-c++
 [root@base src]# cd /usr/local/src/
-[root@base src]# wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz
-[root@base src]# tar xf /usr/local/src/Python-3.6.5.tgz
-[root@base src]# cd Python-3.6.5
-[root@base Python-3.6.5]# ./configure --prefix=/usr/local/python3.6.5
-[root@base Python-3.6.5]# make -j 4 && make install
-[root@base Python-3.6.5]# ln -s /usr/local/python3.6.5 /usr/local/python3
-[root@base Python-3.6.5]# echo -e '# Python PATH\nexport PATH=$PATH:/usr/local/python3/bin' >>/etc/profile
-[root@base Python-3.6.5]# source /etc/profile
-[root@base Python-3.6.5]# python3 -m pip install --upgrade pip
+[root@base src]# wget https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tgz
+[root@base src]# tar xf /usr/local/src/Python-3.6.8.tgz
+[root@base src]# cd Python-3.6.8
+[root@base Python-3.6.8]# ./configure --prefix=/usr/local/python3.6.8
+[root@base Python-3.6.8]# make -j 4 && make install
+[root@base Python-3.6.8]# ln -s /usr/local/python3.6.8 /usr/local/python3
+[root@base Python-3.6.8]# echo -e '# Python PATH\nexport PATH=$PATH:/usr/local/python3/bin' >>/etc/profile
+[root@base Python-3.6.8]# source /etc/profile
+[root@base Python-3.6.8]# python3 -m pip install --upgrade pip
 
 # 优化PIP源
-[root@base Python-3.6.5]# vim /etc/pip.conf
+[root@base Python-3.6.8]# vim /etc/pip.conf
 [global]
 trusted-host =  pypi.douban.com
 index-url = http://pypi.douban.com/simple

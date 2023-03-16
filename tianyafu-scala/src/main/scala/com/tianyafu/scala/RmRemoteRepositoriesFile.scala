@@ -25,7 +25,7 @@ object RmRemoteRepositoriesFile {
 
 
   def main(args: Array[String]): Unit = {
-    val path = args(0)
+    val path = "D:\\maven_repo"
     val file = new File(path)
     rmRemoteRepositories(file)
     println("完成了")

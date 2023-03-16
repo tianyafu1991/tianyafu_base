@@ -23,7 +23,6 @@ HADOOP_CONF_DIR=/etc/hadoop/conf
 # 将spark的jars目录下的jar 打成一个压缩包 并上传到hdfs上
 [root@hadoop001 conf]# cd ~/app/spark/jars/
 [root@hadoop001 jars]# zip -r spark-jars.zip ./*.jar
-[root@hadoop001 jars]# zip -r spark-jars.zip ./*.jar
 [root@hadoop001 jars]# hdfs dfs -mkdir /spark_jars
 [root@hadoop001 jars]# hdfs dfs -put spark-jars.zip /spark_jars
 [root@hadoop001 jars]# cd ~/app/spark/conf/
