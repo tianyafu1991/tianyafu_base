@@ -34,6 +34,7 @@ public class Producer extends Thread {
                         messageStr), new DemoCallBack(startTime, messageNo, messageStr));
             } else { // Send synchronously
                 try {
+                    // 同步的方式  get()这里能获得一个Future对象 这里会阻塞 直到发送成功 吞吐量不够高 所以生产环境中 同步这种方式几乎不用
                     producer.send(new ProducerRecord<>(topic,
                             messageNo + "",
                             messageStr)).get();
@@ -48,7 +49,7 @@ public class Producer extends Thread {
 
 
     public static void main(String[] args) {
-        new Producer("tyf_kafka_1",false).start();
+        new Producer("tyf_kafka_1",true).start();
     }
 }
 
