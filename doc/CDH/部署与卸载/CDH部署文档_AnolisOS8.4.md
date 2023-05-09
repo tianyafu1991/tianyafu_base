@@ -43,7 +43,7 @@ CDH官方是对JDK的版本有推荐  推荐版本是CDH经过测试的 最佳�
 [root@mdw ~]# scp /etc/hosts sdw2:/etc/hosts
 # 配置信任关系 部署CDH不是必须要配置信任关系 但配置信任关系后 集群间scp方便 且后续DolphinScheduler部署是必须要打通信任关系的
 [root@mdw ~]# ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-# 将hadoop002和hadoop003上的公钥文件拷贝到hadoop001上
+# 将sdw1和sdw2上的公钥文件拷贝到mdw上
 [root@sdw1 ~]# scp ~/.ssh/id_rsa.pub  mdw:~/.ssh/id_rsa.pub2
 [root@sdw2 ~]# scp ~/.ssh/id_rsa.pub  mdw:~/.ssh/id_rsa.pub3
 # 将公钥添加到~/.ssh/authorized_keys文件中
@@ -114,7 +114,7 @@ restrict 172.24.88.0 mask 255.255.255.0 nomodify notrap
 # 各个节点都要创建该目录
 [root@mdw ~]# mkdir /usr/java
 # 分发JDK到各个节点的/tmp目录下  JDK事先上传到了mdw的/root/cdh5.16.1目录下
-[root@mdw ~]# mv /root/cdh5.16.1/jdk-8u181-linux-x64.tar.gz /tmp
+[root@mdw ~]# cp /root/cdh5.16.1/jdk-8u181-linux-x64.tar.gz /tmp
 [root@mdw ~]# scp /tmp/jdk-8u181-linux-x64.tar.gz sdw1:/tmp/
 [root@mdw ~]# scp /tmp/jdk-8u181-linux-x64.tar.gz sdw2:/tmp/
 
@@ -141,17 +141,17 @@ restrict 172.24.88.0 mask 255.255.255.0 nomodify notrap
 
 ## 离线部署MySQL
 ```shell
-# MySQL选择部署在hadoop001上 已事先上传到了hadoop001的/root/cdh5.16.1
-[root@mdw ~]#  mv /root/cdh5.16.1/mysql-5.7.26-el7-x86_64.tar.gz /usr/local/
-[root@hadoop001 ~]# cd /usr/local/
-[root@hadoop001 local]# tar -xvf /usr/local/mysql-5.7.26-el7-x86_64.tar.gz -C /usr/local/
-[root@hadoop001 local]# mv mysql-5.7.26-el7-x86_64 mysql
+# MySQL选择部署在mdw上 已事先上传到了mdw的/root/cdh5.16.1
+[root@mdw ~]#  cp /root/cdh5.16.1/mysql-5.7.26-el7-x86_64.tar.gz /usr/local/
+[root@mdw ~]# cd /usr/local/
+[root@mdw local]# tar -xvf /usr/local/mysql-5.7.26-el7-x86_64.tar.gz -C /usr/local/
+[root@mdw local]# mv mysql-5.7.26-el7-x86_64 mysql
 # 创建binlog归档目录、数据目录、临时目录
-[root@hadoop001 local]# mkdir mysql/arch mysql/data mysql/tmp
-[root@hadoop001 local]# cp /etc/my.cnf my.cnf.bak
+[root@mdw local]# mkdir mysql/arch mysql/data mysql/tmp
+[root@mdw local]# cp /etc/my.cnf my.cnf.bak
 # 先清空/etc/my.cnf 再将内容拷贝到/etc/my.cnf中
-[root@hadoop001 local]# >/etc/my.cnf
-[root@hadoop001 local]# vi /etc/my.cnf
+[root@mdw local]# >/etc/my.cnf
+[root@mdw local]# vi /etc/my.cnf
 
 [client]
 port            = 3306
@@ -273,18 +273,18 @@ write_buffer = 2M
 
 
 # 创建用户组及用户
-[root@hadoop001 local]# groupadd -g 101 mysql
-[root@hadoop001 local]# useradd -u 514 -g mysql -G root -d /usr/local/mysql mysqladmin
+[root@mdw local]# groupadd -g 101 mysql
+[root@mdw local]# useradd -u 514 -g mysql -G root -d /usr/local/mysql mysqladmin
 useradd: warning: the home directory already exists.
 Not copying any file from skel directory into it.
-[root@hadoop001 local]#  id mysqladmin
+[root@mdw local]#  id mysqladmin
 uid=514(mysqladmin) gid=101(mysql) groups=101(mysql),0(root)
 
 # copy 环境变量配置文件至mysqladmin用户的home目录中,为了以下步骤配置个人环境变量
-[root@hadoop001 local]# cp /etc/skel/.* /usr/local/mysql
+[root@mdw local]# cp /etc/skel/.* /usr/local/mysql
 
 # 编辑mysql/.bashrc 在文件后追加以下内容
-[root@hadoop001 local]# vi mysql/.bashrc
+[root@mdw local]# vi mysql/.bashrc
 
 export MYSQL_BASE=/usr/local/mysql
 export PATH=${MYSQL_BASE}/bin:$PATH
@@ -297,29 +297,29 @@ PS1=`uname -n`":"'$USER'":"'$PWD'":>"; export PS1
 
 
 # 赋权限和用户组，切换用户mysqladmin，安装
-[root@hadoop001 local]# chown mysqladmin:mysql /etc/my.cnf
-[root@hadoop001 local]# chmod  640 /etc/my.cnf
-[root@hadoop001 local]# chown -R mysqladmin:mysql /usr/local/mysql
-[root@hadoop001 local]# chmod -R 755 /usr/local/mysql
+[root@mdw local]# chown mysqladmin:mysql /etc/my.cnf
+[root@mdw local]# chmod  640 /etc/my.cnf
+[root@mdw local]# chown -R mysqladmin:mysql /usr/local/mysql
+[root@mdw local]# chmod -R 755 /usr/local/mysql
 
 # 设置开机自启
-[root@hadoop001 local]# cd /usr/local/mysql
-[root@hadoop001 mysql]# cp support-files/mysql.server /etc/rc.d/init.d/mysql
-[root@hadoop001 mysql]# chmod +x /etc/rc.d/init.d/mysql
-[root@hadoop001 mysql]# chkconfig --del mysql
-[root@hadoop001 mysql]# chkconfig --add mysql
-[root@hadoop001 mysql]# chkconfig --level 345 mysql on
+[root@mdw local]# cd /usr/local/mysql
+[root@mdw mysql]# cp support-files/mysql.server /etc/rc.d/init.d/mysql
+[root@mdw mysql]# chmod +x /etc/rc.d/init.d/mysql
+[root@mdw mysql]# chkconfig --del mysql
+[root@mdw mysql]# chkconfig --add mysql
+[root@mdw mysql]# chkconfig --level 345 mysql on
 # 编辑/etc/rc.local 追加以下内容
-[root@hadoop001 mysql]# vi /etc/rc.local
+[root@mdw mysql]# vi /etc/rc.local
 su - mysqladmin -c "/etc/init.d/mysql start --federated"
 
 # 赋权 该文件如果没有执行权限 MySQL开机无法自启动
-[root@hadoop001 mysql]# chmod +x /etc/rc.d/rc.local
+[root@mdw mysql]# chmod +x /etc/rc.d/rc.local
 
 # 安装libaio及安装mysql的初始db
-[root@hadoop001 mysql]# yum -y install libaio
+[root@mdw mysql]# yum -y install libaio
 # 切换到mysqladmin用户并执行以下命令
-[root@hadoop001 mysql]# su - mysqladmin
+[root@mdw mysql]# su - mysqladmin
 bin/mysqld \
 --defaults-file=/etc/my.cnf \
 --user=mysqladmin \
@@ -328,14 +328,14 @@ bin/mysqld \
 --initialize
 
 # 查看临时密码
-hadoop001:mysqladmin:/usr/local/mysql:>cd /usr/local/mysql/data
-hadoop001:mysqladmin:/usr/local/mysql/data:>cat hostname.err |grep password
+mdw:mysqladmin:/usr/local/mysql:>cd /usr/local/mysql/data
+mdw:mysqladmin:/usr/local/mysql/data:>cat hostname.err |grep password
 2021-12-02T14:55:15.025740Z 1 [Note] A temporary password is generated for root@localhost: uhbkgijW%4yJ
 
 # 启动
-hadoop001:mysqladmin:/usr/local/mysql/data:>/usr/local/mysql/bin/mysqld_safe --defaults-file=/etc/my.cnf &
+mdw:mysqladmin:/usr/local/mysql/data:>/usr/local/mysql/bin/mysqld_safe --defaults-file=/etc/my.cnf &
 # 使用临时密码登入到MySQL的命令行中
-hadoop001:mysqladmin:/usr/local/mysql/data:>mysql -uroot -p'uhbkgijW%4yJ'
+mdw:mysqladmin:/usr/local/mysql/data:>mysql -uroot -p'uhbkgijW%4yJ'
 
 # 添加root用户并赋权
 mysql> alter user root@localhost identified by 'root';
@@ -347,7 +347,7 @@ Query OK, 0 rows affected, 1 warning (0.00 sec)
 mysql>  flush privileges;
 Query OK, 0 rows affected (0.01 sec)
 # 重启MySQL
-hadoop001:mysqladmin:/usr/local/mysql/data:>service mysql restart
+mdw:mysqladmin:/usr/local/mysql/data:>service mysql restart
 ```
 
 ## 创建CDH需要的MySQL库和用户并赋权
@@ -367,6 +367,12 @@ Query OK, 1 row affected (0.00 sec)
 mysql> grant all privileges on amon.* to 'amon'@'%' identified by 'amon';
 Query OK, 0 rows affected, 1 warning (0.00 sec)
 
+mysql> create database hive default character set utf8 DEFAULT COLLATE utf8_general_ci;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> grant all privileges on hive.* to 'hive'@'%' identified by 'hive';
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
 mysql> flush privileges;
 Query OK, 0 rows affected (0.00 sec)
 
@@ -376,15 +382,15 @@ Query OK, 0 rows affected (0.00 sec)
 ```shell
 # MySQL的驱动包一定要放在/usr/share/java目录下  且必须重命名为mysql-connector-java.jar 且官方推荐使用5.1.x系列的jar包:Cloudera recommends using only version 5.1 of the JDBC driver.
 # 参见:https://docs.cloudera.com/documentation/enterprise/5-16-x/topics/cm_ig_mysql.html#cmig_topic_5_5_3
-[root@hadoop001 mysql]# cd
-[root@hadoop001 ~]# mkdir -p /usr/share/java
-[root@hadoop001 ~]# mv /root/cdh5.16.1/mysql-connector-java-5.1.47.jar /usr/share/java/mysql-connector-java.jar
+[root@mdw mysql]# cd
+[root@mdw ~]# mkdir -p /usr/share/java
+[root@mdw ~]# cp /root/cdh5.16.1/mysql-connector-java-5.1.47.jar /usr/share/java/mysql-connector-java.jar
 ```
 
 ## 部署CM
 ```shell
 # 移动cm的安装包到/tmp并分发到各个节点
-[root@mdw ~]# mv /root/cdh5.16.1/cloudera-manager-centos7-cm5.16.1_x86_64.tar.gz /tmp/
+[root@mdw ~]# cp /root/cdh5.16.1/cloudera-manager-centos7-cm5.16.1_x86_64.tar.gz /tmp/
 [root@mdw ~]# scp /tmp/cloudera-manager-centos7-cm5.16.1_x86_64.tar.gz sdw1:/tmp/
 [root@mdw ~]# scp /tmp/cloudera-manager-centos7-cm5.16.1_x86_64.tar.gz sdw2:/tmp/
 
@@ -395,13 +401,14 @@ Query OK, 0 rows affected (0.00 sec)
 
 
 [root@mdw tmp]# cd /opt/cloudera-manager/cm-5.16.1/etc/cloudera-scm-agent/
-# 配置各个节点上的配置文件 cm server的host要指向hadoop001
+# 配置各个节点上的配置文件 cm server的host要指向mdw
 [root@mdw cloudera-scm-agent]# vim config.ini
 server_host=mdw
 
 # cm server节点上 去修改cm server的元数据库信息
 [root@mdw cloudera-scm-agent]# cd ../cloudera-scm-server/
 [root@mdw cloudera-scm-server]# vim db.properties
+com.cloudera.cmf.db.type=mysql
 com.cloudera.cmf.db.host=mdw
 com.cloudera.cmf.db.name=cmf
 com.cloudera.cmf.db.user=cmf
@@ -420,8 +427,8 @@ com.cloudera.cmf.db.setupType=EXTERNAL
 ```shell
 [root@mdw cm-5.16.1]# cd /root/cdh5.16.1/
 # 去除CDH-5.16.1-1.cdh5.16.1.p0.3-el7.parcel.sha1该文件末尾的1 如果不去掉 在部署过程中 cm会认为该parcel文件还未下载完成 会继续下载
-[root@mdw cdh5.16.1]# mv CDH-5.16.1-1.cdh5.16.1.p0.3-el7.parcel.sha1 CDH-5.16.1-1.cdh5.16.1.p0.3-unknown.parcel.sha
-[root@mdw cdh5.16.1]# mv CDH-5.16.1-1.cdh5.16.1.p0.3-el7.parcel CDH-5.16.1-1.cdh5.16.1.p0.3-unknown.parcel
+[root@mdw cdh5.16.1]# cp CDH-5.16.1-1.cdh5.16.1.p0.3-el7.parcel.sha1 CDH-5.16.1-1.cdh5.16.1.p0.3-unknown.parcel.sha
+[root@mdw cdh5.16.1]# cp CDH-5.16.1-1.cdh5.16.1.p0.3-el7.parcel CDH-5.16.1-1.cdh5.16.1.p0.3-unknown.parcel
 # 将"parcelName": "CDH-5.16.1-1.cdh5.16.1.p0.3-el7.parcel" 也改为unknow
 [root@mdw cdh5.16.1]# vim manifest.json
 # 校验parcel文件 用sha1sum计算parcel包 要 与CDH-5.16.1-1.cdh5.16.1.p0.3-el7.parcel.sha中的一致
@@ -432,13 +439,54 @@ com.cloudera.cmf.db.setupType=EXTERNAL
 # 在mdw上部署parcel的离线源
 # 创建并移动parcel等3个文件到parcel-repo目录中 并设置所属用户和用户组
 [root@mdw cdh5.16.1]# mkdir -p /opt/cloudera/parcel-repo
-[root@mdw cdh5.16.1]# mv CDH-5.16.1-1.cdh5.16.1.p0.3-unknown.parcel* /opt/cloudera/parcel-repo
-[root@mdw cdh5.16.1]# mv manifest.json /opt/cloudera/parcel-repo
+[root@mdw cdh5.16.1]# cp CDH-5.16.1-1.cdh5.16.1.p0.3-unknown.parcel* /opt/cloudera/parcel-repo
+[root@mdw cdh5.16.1]# cp manifest.json /opt/cloudera/parcel-repo
 [root@mdw cdh5.16.1]# chown -R cloudera-scm:cloudera-scm /opt/cloudera
 [root@mdw cdh5.16.1]# cd /opt/cloudera
 [root@mdw cloudera]# ll
 total 4
 drwxr-xr-x 2 cloudera-scm cloudera-scm 4096 Dec  3 06:37 parcel-repo
+```
+
+## 更换perl的版本
+```shell
+# 3台机器全部更换
+# 首先查看当前perl语言库的版本
+[root@mdw ~]# perl -v
+This is perl 5, version 26, subversion 3 (v5.26.3) built for x86_64-linux-thread-multi
+
+# 先移除perl
+[root@mdw ~]# yum remove perl -y
+# 创建临时操作目录
+[root@mdw ~]# mkdir /tmp/perl
+[root@mdw ~]# cd /tmp/perl
+[root@mdw ~]# wget http://www.cpan.org/src/5.0/perl-5.16.1.tar.gz
+[root@mdw ~]# tar -zxvf perl-5.16.1.tar.gz
+[root@mdw perl]# cd perl-5.16.1
+# 创建安装目录
+[root@mdw perl-5.16.1]# mkdir /usr/local/perl
+[root@mdw perl-5.16.1]# ./Configure -des -Dprefix=/usr/local/perl
+[root@mdw perl-5.16.1]# make && make install
+[root@mdw perl-5.16.1]# cd /usr/bin/
+[root@mdw bin]# mv perl perl.old
+[root@mdw bin]# ln -s /usr/local/perl/bin/perl /usr/bin/perl
+[root@mdw bin]# perl -v
+
+This is perl 5, version 16, subversion 1 (v5.16.1) built for x86_64-linux
+
+
+```
+
+## 修改cloudera-scm-agent的一个python脚本
+```shell
+# 不修改该脚本 启动yarn会报错 Error found before invoking supervisord: dictionary update sequence element #101 has length 1; 2 is required
+[root@mdw perl]# cd /opt/cloudera-manager/cm-5.16.1/lib64/cmf/agent/build/env/lib/python2.7/site-packages/cmf-5.16.1-py2.7.egg/cmf/util/
+# 修改第393行
+[root@mdw util]# vim __init__.py
+原始为 pipe = subprocess.Popen(['/bin/bash', '-c', ". %s; %s; env" % (path, command)],
+                          stdout=subprocess.PIPE, env=caller_env)
+修改为   pipe = subprocess.Popen(['/bin/bash', '-c', ". %s; %s; env | grep -v { | grep -v }" % (path, command)],
+                          stdout=subprocess.PIPE, env=caller_env)
 ```
 
 ## 正式集群部署
@@ -454,10 +502,10 @@ drwxr-xr-x 2 cloudera-scm cloudera-scm 4096 Dec  3 06:37 parcel-repo
 
 
 # 各个节点启动agent
-[root@hadoop001 ~]# /opt/cloudera-manager/cm-5.16.1/etc/init.d/cloudera-scm-agent start
-[root@hadoop001 ~]# /opt/cloudera-manager/cm-5.16.1/etc/init.d/cloudera-scm-agent status
+[root@mdw ~]# /opt/cloudera-manager/cm-5.16.1/etc/init.d/cloudera-scm-agent start
+[root@mdw ~]# /opt/cloudera-manager/cm-5.16.1/etc/init.d/cloudera-scm-agent status
 cloudera-scm-agent (pid  4288) is running...
-[root@hadoop001 ~]# tail -200f /opt/cloudera-manager/cm-5.16.1/log/cloudera-scm-agent/cloudera-scm-agent.log
+[root@mdw ~]# tail -200f /opt/cloudera-manager/cm-5.16.1/log/cloudera-scm-agent/cloudera-scm-agent.log
 
 # agent启动时 依次报错:
 1.ImportError: libssl.so.10: cannot open shared object file: No such file or directory
@@ -471,14 +519,34 @@ echo never > /sys/kernel/mm/transparent_hugepage/defrag
 echo never > /sys/kernel/mm/transparent_hugepage/enabled
 ```
 
+## 部署HDFS
+```
+直接部署会报错:
+/opt/cloudera-manager/cm-5.16.1/run/cloudera-scm-agent/process/ccdeploy_hadoop-conf_etchadoopconf.cloudera.hdfs_2629654669231768151/hadoop-conf/topology.py
+Unescaped left brace in regex is illegal here in regex; marked by <-- HERE in m/{{ <-- HERE CDH_MR1_HOME}}/ at -e line 1.
+是python脚本中报了一个错
+解决方法: 更换每台机器中的perl的版本 参考博客:https://blog.csdn.net/gscsd_t/article/details/128173516
+具体操作详见本文档:更换perl的版本
+
+```
+
+## 部署Yarn
+```
+部署yarn时 报错:
+Error found before invoking supervisord: dictionary update sequence element #101 has length 1; 2 is required
+参考:https://www.cnblogs.com/Chadd/p/17000836.html
+具体操作详见本文档:修改cloudera-scm-agent的一个python脚本
+
+```
+
 ## 关闭集群
 ```shell
 # 各个节点关闭agent
-[root@hadoop001 ~]# /opt/cloudera-manager/cm-5.16.1/etc/init.d/cloudera-scm-agent stop
+[root@mdw ~]# /opt/cloudera-manager/cm-5.16.1/etc/init.d/cloudera-scm-agent stop
 
-[root@hadoop001 ~]# /opt/cloudera-manager/cm-5.16.1/etc/init.d/cloudera-scm-server stop
-[root@hadoop001 ~]# su - mysqladmin
-hadoop001:mysqladmin:/usr/local/mysql:>service mysql stop
+[root@mdw ~]# /opt/cloudera-manager/cm-5.16.1/etc/init.d/cloudera-scm-server stop
+[root@mdw ~]# su - mysqladmin
+mdw:mysqladmin:/usr/local/mysql:>service mysql stop
 ```
 
 ## 增加Hive Service
