@@ -158,6 +158,7 @@ pip3 install -i https://mirrors.aliyun.com/pypi/simple/ sasl==0.2.1
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ requests==2.19.1
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ sqlalchemy==1.2.11
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pyquery==1.4.3
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ httpx==0.24.1
 
 算法用的库:
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ tqdm==4.62.3
