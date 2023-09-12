@@ -142,15 +142,11 @@ index-url = http://pypi.douban.com/simple
 
 # 安装必要的包
 yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel.x86_64 cyrus-sasl-devel.x86_64 mysql-devel python3-devel.x86_64
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ numpy==1.15.4
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pandas==0.23.4
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ interval3==2.0.0
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ PyHive==0.6.1
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pymssql==2.1.4
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ PyMySQL==0.9.3
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ python-dateutil==2.7.5
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pytz==2018.7
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ six==1.12.0
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ thrift==0.11.0
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ psycopg2-binary==2.8.2
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ thrift-sasl==0.3.0
@@ -158,7 +154,9 @@ pip3 install -i https://mirrors.aliyun.com/pypi/simple/ sasl==0.2.1
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ requests==2.19.1
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ sqlalchemy==1.2.11
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pyquery==1.4.3
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ httpx==0.24.1
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple httpx==0.22.0
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ SQLAlchemy==1.4.39
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pyspark==2.4.6
 
 算法用的库:
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ tqdm==4.62.3
