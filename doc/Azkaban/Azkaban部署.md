@@ -199,9 +199,9 @@ curl -G "sdw2:12321/executor?action=activate" && echo
 ## 关闭Azkaban集群
 ```shell
 [admin@hadoop001 ~]$ cd $AZKABAN_WEB_HOME
-[admin@hadoop001 azkaban-web-server]$ ./bin/shutdown-web.sh
+[admin@hadoop001 azkaban-web-server]$ sh ./bin/shutdown-web.sh
 [admin@hadoop001 azkaban-web-server]$ cd $AZKABAN_EXECUTOR_HOME
-[admin@hadoop001 azkaban-exec-server]$ ./bin/shutdown-exec.sh 
+[admin@hadoop001 azkaban-exec-server]$ sh ./bin/shutdown-exec.sh
 
 ```
 

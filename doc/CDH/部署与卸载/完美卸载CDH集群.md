@@ -57,6 +57,7 @@ rm -rf /etc/security/limits.d/cloudera-scm.conf
 rm -rf /etc/hadoop* /etc/zookeeper /etc/hive* /etc/hbase* /etc/spark /etc/impala
 rm -rf /tmp/scm_*
 rm -rf /tmp/.scm*
+rm -rf /usr/lib64/cmf
 
 8.全局搜索是否删干净了
 find / -name '*cloudera*'
