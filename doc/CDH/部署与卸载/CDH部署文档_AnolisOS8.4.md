@@ -429,7 +429,7 @@ com.cloudera.cmf.db.setupType=EXTERNAL
 # 去除CDH-5.16.1-1.cdh5.16.1.p0.3-el7.parcel.sha1该文件末尾的1 如果不去掉 在部署过程中 cm会认为该parcel文件还未下载完成 会继续下载
 [root@mdw cdh5.16.1]# cp CDH-5.16.1-1.cdh5.16.1.p0.3-el7.parcel.sha1 CDH-5.16.1-1.cdh5.16.1.p0.3-unknown.parcel.sha
 [root@mdw cdh5.16.1]# cp CDH-5.16.1-1.cdh5.16.1.p0.3-el7.parcel CDH-5.16.1-1.cdh5.16.1.p0.3-unknown.parcel
-# 将"parcelName": "CDH-5.16.1-1.cdh5.16.1.p0.3-el7.parcel" 也改为unknow
+# 将"parcelName": "CDH-5.16.1-1.cdh5.16.1.p0.3-el7.parcel" 也改为unknown
 [root@mdw cdh5.16.1]# vim manifest.json
 # 校验parcel文件 用sha1sum计算parcel包 要 与CDH-5.16.1-1.cdh5.16.1.p0.3-el7.parcel.sha中的一致
 [root@mdw cdh5.16.1]# sha1sum CDH-5.16.1-1.cdh5.16.1.p0.3-unknown.parcel
