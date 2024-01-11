@@ -165,6 +165,10 @@ pip3 install --upgrade nni --ignore-installed -i https://mirrors.aliyun.com/pypi
 pip3 install --upgrade nni --ignore-installed -i https://mirrors.aliyun.com/pypi/simple/ cn2an==0.5.11
 
 pip3 install selenium -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
+
+其他常用的库:
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ python-docx==0.8.11
+pip3 install -i https://mirrors.aliyun.com/pypi/simple/ openpyxl==3.0.10
 ```
 
 
