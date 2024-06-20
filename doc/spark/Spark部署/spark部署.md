@@ -64,7 +64,35 @@ Time taken: 7.565 seconds, Fetched 5 row(s)
 20/10/20 13:41:56 INFO thriftserver.SparkSQLCLIDriver: Time taken: 7.565 seconds, Fetched 5 row(s)
 ```
 
+## 配置Spark History Server
+```
+# 参考https://spark.apache.org/docs/2.4.6/monitoring.html、https://spark.apache.org/docs/2.4.6/running-on-yarn.html、https://spark.apache.org/docs/2.4.6/configuration.html
+# spark-defaults.conf文件中
 
+# 开启Spark History
+spark.eventLog.enabled=true
+# Spark Application日志写入到该目录 该目录要手动创建 并设置目录权限为drwxrwxrwxt
+spark.eventLog.dir=hdfs:///tmp/logs/spark
+# Spark History从该目录中读取Spark Application的日志 该目录应与spark.eventLog.dir的一致
+spark.history.fs.logDirectory=hdfs:///tmp/logs/spark
+# 调整 Spark History的web ui 端口
+spark.history.ui.port=28080
+# 开启Spark History 日志定期删除
+spark.history.fs.cleaner.enabled=true
+# 日志开启压缩
+spark.eventLog.compress=true
+# 打通Yarn ResourceManager UI和Spark History Server
+spark.yarn.historyServer.address=sdw2:28080
+# 如果spark web ui被禁用 就使用history server的web ui
+spark.yarn.historyServer.allowTracking=true
+
+# 以下几个参数是3.x版本才支持
+spark.eventLog.rolling.enabled=true
+spark.eventLog.rolling.maxFileSize=128m
+# 开启driver的日志记录
+spark.driver.log.persistToDfs.enabled=false
+spark.driver.log.dfsDir=hdfs:///tmp/logs/spark/driverLogs
+```
 
 
 
