@@ -32,6 +32,9 @@
 ## 创建Azkaban元数据库
 ```
 [admin@sdw2 app]$ sudo su - mysqladmin
+
+mysql> drop database if exists azkaban;
+
 mysql> create database azkaban default character set utf8 DEFAULT COLLATE utf8_general_ci;
 Query OK, 1 row affected (0.00 sec)
 

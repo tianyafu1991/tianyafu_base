@@ -20,7 +20,7 @@
 
 ## yum安装一些必要的工具
 ```
-[root@mdw ~]# yum install -y net-tools.x86_64 vim lrzsz lsof wget screen tree ntpdate zip unzip telent dos2unix traceroute nmap htop iotop iftop telnet
+[root@mdw ~]# yum install -y net-tools.x86_64 vim lrzsz lsof wget screen tree ntpdate zip unzip telent dos2unix traceroute nmap htop iotop iftop telnet tmux
 ```
 
 ## 固定IP
@@ -137,29 +137,29 @@ admin
 # 优化PIP源
 [root@base Python-3.6.8]# vim /etc/pip.conf
 [global]
-trusted-host =  pypi.douban.com
-index-url = http://pypi.douban.com/simple
+trusted-host = pypi.tuna.tsinghua.edu.cn
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple
 
 # 安装必要的包
 yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel.x86_64 cyrus-sasl-devel.x86_64 mysql-devel python3-devel.x86_64
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pandas==0.23.4
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ interval3==2.0.0
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ PyHive==0.6.1
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pymssql==2.1.4
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ PyMySQL==0.9.3
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ thrift==0.11.0
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ psycopg2-binary==2.8.2
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ thrift-sasl==0.3.0
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ sasl==0.2.1
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ requests==2.19.1
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ sqlalchemy==1.2.11
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ pyquery==1.4.3
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pandas==1.1.5
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple interval3==2.0.0
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple PyHive==0.6.1
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pymssql==2.1.4
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple PyMySQL==0.9.3
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple cx_Oracle==8.2.1
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple thrift==0.11.0
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple psycopg2-binary==2.8.2
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple thrift-sasl==0.3.0
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple sasl==0.2.1
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple requests==2.19.1
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple sqlalchemy==1.2.11
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pyquery==1.4.3
 pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple httpx==0.22.0
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ SQLAlchemy==1.4.39
 pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pyspark==2.4.6
 
 算法用的库:
-pip3 install -i https://mirrors.aliyun.com/pypi/simple/ tqdm==4.62.3
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple tqdm==4.62.3
 pip3 install -i https://mirrors.aliyun.com/pypi/simple/ sshtunnel==0.4.0
 pip3 install --upgrade nni --ignore-installed -i https://mirrors.aliyun.com/pypi/simple/ PyYAML==5.4.1
 pip3 install --upgrade nni --ignore-installed -i https://mirrors.aliyun.com/pypi/simple/ cn2an==0.5.11

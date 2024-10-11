@@ -3,7 +3,7 @@
 编译版本信息
 spark.version=3.4.3
 scala.version=2.12.17
-maven.version=3.8.6
+maven.version=3.8.1
 java.version=1.8.0_181
 windows上git版本 git.version=2.17.0
 hadoop.version=2.6.0-cdh5.16.1
@@ -125,6 +125,8 @@ https://downloads.lightbend.com/scala/2.12.17/scala-2.12.17.tgz
 ```
 ## 编译报错
 ```
+官网建议maven版本为3.8.6 实际3.8.6版本在windows上编译时会报错 用3.8.1版本编译就不报错 参考https://issues.apache.org/jira/browse/SPARK-37634
+
 编译到yarn module 的org.apache.spark.deploy.yarn.Client会报错
 参考：
 https://www.cnblogs.com/chuijingjing/p/14660893.html

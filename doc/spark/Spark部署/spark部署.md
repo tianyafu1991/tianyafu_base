@@ -69,29 +69,67 @@ Time taken: 7.565 seconds, Fetched 5 row(s)
 # 参考https://spark.apache.org/docs/2.4.6/monitoring.html、https://spark.apache.org/docs/2.4.6/running-on-yarn.html、https://spark.apache.org/docs/2.4.6/configuration.html
 # spark-defaults.conf文件中
 
+# 指定Hive Metastore版本和jar包路径
+spark.sql.hive.metastore.version=1.1.0
+spark.sql.hive.metastore.jars=/opt/cloudera/parcels/CDH/lib/hive/lib/*
+
+# 将Spark的jar上传到HDFS上
+spark.yarn.archive=hdfs:///etl/lib/spark-jars.zip
+
+# 开启动态分区
+spark.sql.sources.partitionOverwriteMode=dynamic
+
 # 开启Spark History
 spark.eventLog.enabled=true
 # Spark Application日志写入到该目录 该目录要手动创建 并设置目录权限为drwxrwxrwxt
-spark.eventLog.dir=hdfs:///tmp/logs/spark
+spark.eventLog.dir=hdfs:///tmp/logs/spark/applicationHistory
 # Spark History从该目录中读取Spark Application的日志 该目录应与spark.eventLog.dir的一致
-spark.history.fs.logDirectory=hdfs:///tmp/logs/spark
+spark.history.fs.logDirectory=hdfs:///tmp/logs/spark/applicationHistory
 # 调整 Spark History的web ui 端口
 spark.history.ui.port=28080
 # 开启Spark History 日志定期删除
 spark.history.fs.cleaner.enabled=true
 # 日志开启压缩
 spark.eventLog.compress=true
+
+# Spark On Yarn
 # 打通Yarn ResourceManager UI和Spark History Server
 spark.yarn.historyServer.address=sdw2:28080
 # 如果spark web ui被禁用 就使用history server的web ui
 spark.yarn.historyServer.allowTracking=true
+spark.master=yarn
+
+# 调整序列化
+spark.serializer=org.apache.spark.serializer.KryoSerializer
+
+# 开启CBO
+spark.sql.cbo.enabled=true
+spark.sql.cbo.starSchemaDetection=true
 
 # 以下几个参数是3.x版本才支持
 spark.eventLog.rolling.enabled=true
 spark.eventLog.rolling.maxFileSize=128m
 # 开启driver的日志记录
-spark.driver.log.persistToDfs.enabled=false
+spark.driver.log.persistToDfs.enabled=true
 spark.driver.log.dfsDir=hdfs:///tmp/logs/spark/driverLogs
+
+# adaptive相关参数
+spark.sql.adaptive.enabled=true
+spark.sql.adaptive.forceApply=false
+spark.sql.adaptive.logLevel=info
+spark.sql.adaptive.advisoryPartitionSizeInBytes=256m
+spark.sql.adaptive.coalescePartitions.enabled=true
+spark.sql.adaptive.coalescePartitions.initialPartitionNum=1024
+spark.sql.adaptive.fetchShuffleBlocksInBatch=true
+spark.sql.adaptive.localShuffleReader.enabled=true
+spark.sql.adaptive.skewJoin.enabled=true
+spark.sql.adaptive.skewJoin.skewedPartitionFactor=5
+spark.sql.adaptive.skewJoin.skewedPartitionThresholdInBytes=128m
+spark.sql.adaptive.nonEmptyPartitionRatioForBroadcastJoin=0.2
+spark.sql.autoBroadcastJoinThreshold=209715200
+
+# ORC参数
+spark.sql.orc.mergeSchema=true
 ```
 
 
