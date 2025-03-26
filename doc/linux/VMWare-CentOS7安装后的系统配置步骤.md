@@ -122,7 +122,7 @@ admin
 # 切换用户
 [admin@base ~]$ sudo su -
 # 安装依赖
-[root@base ~]# yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel gcc gcc-c++
+[root@base ~]# yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel gcc gcc-c++ python-devel.x86_64 cyrus-sasl-devel.x86_64 mysql-devel python3-devel.x86_64
 [root@base src]# cd /usr/local/src/
 [root@base src]# wget https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tgz
 [root@base src]# tar xf /usr/local/src/Python-3.6.8.tgz
@@ -141,7 +141,6 @@ trusted-host = pypi.tuna.tsinghua.edu.cn
 index-url = https://pypi.tuna.tsinghua.edu.cn/simple
 
 # 安装必要的包
-yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel.x86_64 cyrus-sasl-devel.x86_64 mysql-devel python3-devel.x86_64
 pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pandas==1.1.5
 pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple interval3==2.0.0
 pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple PyHive==0.6.1
