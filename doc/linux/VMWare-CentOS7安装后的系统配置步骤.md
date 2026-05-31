@@ -155,6 +155,8 @@ pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple requests==2.19.1
 pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple sqlalchemy==1.2.11
 pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pyquery==1.4.3
 pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple httpx==0.22.0
+# pyspark2.4.6依赖这个pypandoc的1.7.4版本
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pypandoc==1.7.4
 pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pyspark==2.4.6
 
 算法用的库:

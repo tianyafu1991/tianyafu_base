@@ -23,8 +23,8 @@ HADOOP_CONF_DIR=/etc/hadoop/conf
 # 将spark的jars目录下的jar 打成一个压缩包 并上传到hdfs上
 [root@hadoop001 conf]# cd ~/app/spark/jars/
 [root@hadoop001 jars]# zip -r spark-jars.zip ./*.jar
-[root@hadoop001 jars]# hdfs dfs -mkdir /spark_jars
-[root@hadoop001 jars]# hdfs dfs -put spark-jars.zip /spark_jars
+[root@hadoop001 jars]# hdfs dfs -mkdir -p /etl/lib
+[root@hadoop001 jars]# hdfs dfs -put spark-jars.zip /etl/lib
 [root@hadoop001 jars]# cd ~/app/spark/conf/
 # 配置spark-defaults.conf
 [root@hadoop001 conf]# vim spark-defaults.conf
@@ -81,7 +81,7 @@ spark.sql.sources.partitionOverwriteMode=dynamic
 
 # 开启Spark History
 spark.eventLog.enabled=true
-# Spark Application日志写入到该目录 该目录要手动创建 并设置目录权限为drwxrwxrwxt
+# Spark Application日志写入到该目录 该目录要手动创建 并设置目录权限为drwxrwxrwxt 命令hdfs dfs -chmod -R 1777 hdfs:///tmp/logs/spark
 spark.eventLog.dir=hdfs:///tmp/logs/spark/applicationHistory
 # Spark History从该目录中读取Spark Application的日志 该目录应与spark.eventLog.dir的一致
 spark.history.fs.logDirectory=hdfs:///tmp/logs/spark/applicationHistory
